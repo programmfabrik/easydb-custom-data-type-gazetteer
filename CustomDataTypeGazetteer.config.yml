@@ -1,0 +1,9 @@
+plugin:
+  name: custom-data-type-gazetteer
+  version: 1.0
+  server:
+    api-version:
+      require: 1
+  webfrontend:
+    url: custom-data-type-gazetteer.js
+    l10n: l10n/

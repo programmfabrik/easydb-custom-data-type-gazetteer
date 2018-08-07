@@ -1,0 +1,7 @@
+key,de-DE,en-US,it-IT,es-ES
+custom.data.type.gazetteer.name,Gazetteer,Gazetteer,Gazetteer,Gazetteer
+custom.data.type.gazetteer.search.label,Search,Search,Search,Search
+custom.data.type.gazetteer.preview.label,Preview,Preview,Preview,Preview
+custom.data.type.gazetteer.preview.empty-label,No preview available.,No preview available.,No preview available.,No preview available.
+custom.data.type.gazetteer.detail-map-button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
+custom.data.type.gazetteer.detail-map-button|tooltip,View in map,View in map,View in map,View in map
