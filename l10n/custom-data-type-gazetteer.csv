@@ -5,3 +5,6 @@ custom.data.type.gazetteer.preview.label,Preview,Preview,Preview,Preview
 custom.data.type.gazetteer.preview.empty-label,No preview available.,No preview available.,No preview available.,No preview available.
 custom.data.type.gazetteer.detail-map-button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
 custom.data.type.gazetteer.detail-map-button|tooltip,View in map,View in map,View in map,View in map
+custom.data.type.gazetteer.id.label,ID,ID,ID,ID
+custom.data.type.gazetteer.preview.id-not-found,ID doesn't exist,ID doesn't exist,ID doesn't exist,ID doesn't exist
+custom.data.type.gazetteer.preview.value,%(id)s | %(displayName)s,%(id)s | %(displayName)s,%(id)s | %(displayName)s,%(id)s | %(displayName)s

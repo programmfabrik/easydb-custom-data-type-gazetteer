@@ -1,6 +1,7 @@
 class CustomDataTypeGazetteer extends CustomDataType
 
-	@API_URL = "https://gazetteer.dainst.org/search.json?limit=20&"
+	@SEARCH_API_URL = "https://gazetteer.dainst.org/search.json?limit=20&"
+	@ID_API_URL = "https://gazetteer.dainst.org/doc/"
 	@PLACE_URL = "https://gazetteer.dainst.org/place/"
 
 	getCustomDataTypeName: ->
@@ -42,6 +43,9 @@ class CustomDataTypeGazetteer extends CustomDataType
 		if CUI.util.isEmpty(data)
 			return save_data[@name()] = null
 
+		if CUI.util.isEmpty(data.gazId) or CUI.util.isEmpty(data.displayName)
+			return throw new InvalidSaveDataException()
+
 		return save_data[@name()] =
 			displayName: data.displayName
 			gazId: data.gazId
@@ -52,21 +56,56 @@ class CustomDataTypeGazetteer extends CustomDataType
 		loadingContainer = "loading"
 		loadingLabel = new LocaLabel(loca_key: "autocompletion.loading")
 
-		displayNameEmptyLabel = new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
-
 		searchField = new CUI.Input
 			name: "q"
 			form:
 				label: $$("custom.data.type.gazetteer.search.label")
+
+		searchById = =>
+			if not formData.gazId
+				return
+
+			xhr = new CUI.XHR
+				method: "GET"
+				url: CustomDataTypeGazetteer.ID_API_URL + formData.gazId
+				headers:
+					"Accept": "application/json, text/plain, */*" # This is necessary by the API of Gazetteer.
+
+			waitBlock.show()
+			xhr.start().done((object) =>
+				setObjectData(object)
+			).fail( =>
+				# If not found or error, the display name is false, to show a different message and invalid input.
+				formData.displayName = false
+			).always( =>
+				idField.checkInput()
+
+				CUI.Events.trigger
+					node: form
+					type: "editor-changed"
+
+				outputField.reload()
+				waitBlock.hide()
+			)
+
+		idField = new CUI.Input
+			name: "gazId"
+			form:
+				label: $$("custom.data.type.gazetteer.id.label")
+			checkInput: => not CUI.util.isEmpty(formData.displayName)
+			onDataChanged: =>
+				delete formData.displayName
+				CUI.scheduleCallback
+					call: searchById
+					ms: 300
+
 		outputField = new CUI.DataFieldProxy
 			name: "displayName"
 			form:
 				label: $$("custom.data.type.gazetteer.preview.label")
-			element: =>
-				if formData.displayName
-					return @__getButtonLink(formData)
-				else
-					return displayNameEmptyLabel
+			element: => @__getOutputFieldElement(formData)
+
+		waitBlock = new CUI.WaitBlock(element: outputField)
 
 		autocompletionPopup = new AutocompletionPopup
 			element: searchField
@@ -74,6 +113,25 @@ class CustomDataTypeGazetteer extends CustomDataType
 				autocompletionPopup.hide()
 		autocompletionPopup.addContainer(resultsContainer)
 		autocompletionPopup.addContainer(loadingContainer)
+
+		setObjectData = (object) =>
+			if not object
+				formData.q = ""
+				delete formData.displayName
+				delete formData.gazId
+				delete formData.position
+			else
+				formData.q = ""
+				formData.displayName = object.prefName.title
+				formData.gazId = object.gazId
+
+				if object.prefLocation?.coordinates
+					position =
+						lng: object.prefLocation?.coordinates[0]
+						lat: object.prefLocation?.coordinates[1]
+
+					if CUI.Map.isValidPosition(position)
+						formData.position = position
 
 		search = =>
 			autocompletionPopup.emptyContainer(resultsContainer)
@@ -84,7 +142,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 			searchXHR = new CUI.XHR
 				method: "GET"
-				url: CustomDataTypeGazetteer.API_URL + CUI.encodeUrlData(formData)
+				url: CustomDataTypeGazetteer.SEARCH_API_URL + CUI.encodeUrlData(formData)
 
 			searchXHR.start().done((data) =>
 				autocompletionPopup.emptyContainer(loadingContainer)
@@ -93,30 +151,20 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 				for object in data.result
 					do(object) =>
-						if not object.prefLocation?.coordinates # Some results do not include the coordinates.
-							return
-
-						position =
-							lng: object.prefLocation?.coordinates[0]
-							lat: object.prefLocation?.coordinates[1]
-
-						item = autocompletionPopup.appendItem(resultsContainer, new CUI.Label(text: object.prefName.title))
+						item = autocompletionPopup.appendItem(resultsContainer, new CUI.Label(text: object.gazId + " - " + object.prefName.title))
 						CUI.Events.listen
 							type: "click"
 							node: item
 							call: (ev) =>
 								ev.stopPropagation()
 
-								formData.q = ""
-								formData.displayName = object.prefName.title
-								formData.gazId = object.gazId
-								if CUI.Map.isValidPosition(position)
-									formData.position = position
+								setObjectData(object)
 
-								outputField.reload()
 								searchField.reload()
-								autocompletionPopup.hide()
+								idField.reload()
+								outputField.reload()
 
+								autocompletionPopup.hide()
 								CUI.Events.trigger
 									node: form
 									type: "editor-changed"
@@ -127,7 +175,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 		form = new CUI.Form
 			maximize_horizontal: true
-			fields: [searchField, outputField]
+			fields: [
+				searchField
+			,
+				idField
+			,
+				outputField
+			]
 			data: formData
 			onDataChanged: =>
 				CUI.scheduleCallback
@@ -145,9 +199,25 @@ class CustomDataTypeGazetteer extends CustomDataType
 			initData = data[@name()]
 		initData
 
+	__getOutputFieldElement: (formData) ->
+		if formData.displayName and formData.gazId
+			return @__getButtonLink(formData)
+		else if CUI.util.isFalse(formData.displayName)
+			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.id-not-found"), class: "ez-label-invalid")
+		else
+			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
+
+
 	__getButtonLink: (initData) ->
 		link = CustomDataTypeGazetteer.PLACE_URL + initData.gazId
-		text = initData.displayName or link
+
+		if initData.displayName
+			text = $$("custom.data.type.gazetteer.preview.value",
+				displayName: initData.displayName
+				id: initData.gazId
+			)
+		else
+			text = link
 
 		return new CUI.ButtonHref
 			appearance: "link"
