@@ -13,6 +13,22 @@ class CustomDataTypeGazetteer extends CustomDataType
 	getCustomDataOptionsInDatamodelInfo: (custom_settings) ->
 		return []
 
+	supportsStandard: ->
+		true
+
+	renderSearchInput: (data, opts={}) ->
+		return new SearchToken(
+			column: @
+			data: data
+			fields: opts.fields
+		).getInput().DOM
+
+	getFieldNamesForSearch: ->
+		@__getFieldNames()
+
+	getFieldNamesForSuggest: ->
+		@__getFieldNames()
+
 	renderEditorInput: (data) ->
 		initData = @__initData(data)
 		form = @__initForm(initData)
@@ -50,6 +66,62 @@ class CustomDataTypeGazetteer extends CustomDataType
 			displayName: data.displayName
 			gazId: data.gazId
 			position: data.position
+			_fulltext:
+				text: data.displayName
+				string: data.gazId
+			_standard:
+				text: data.displayName
+
+	getQueryFieldBadge: (data) =>
+		if data["#{@name()}:unset"]
+			value = $$("text.column.badge.without")
+		else
+			value = data[@name()]
+
+		name: @nameLocalized()
+		value: value
+
+	getSearchFilter: (data, key=@name()) ->
+		if data[key+":unset"]
+			filter =
+				type: "in"
+				fields: [ @fullName()+".displayName" ]
+				in: [ null ]
+			filter._unnest = true
+			filter._unset_filter = true
+			return filter
+
+		filter = super(data, key)
+		if filter
+			return filter
+
+		if CUI.util.isEmpty(data[key])
+			return
+
+		val = data[key]
+		[str, phrase] = Search.getPhrase(val)
+
+		switch data[key+":type"]
+			when "token", "fulltext", undefined
+				filter =
+					type: "match"
+					mode: data[key+":mode"]
+					fields: @getFieldNamesForSearch()
+					string: str
+					phrase: phrase
+
+			when "field"
+				filter =
+					type: "in"
+					fields: @getFieldNamesForSearch()
+					in: [ str ]
+		filter
+
+	__getFieldNames: ->
+		return [
+			@fullName()+".gazId"
+			@fullName()+".displayName"
+		]
 
 	__initForm: (formData) ->
 		resultsContainer = "results"
@@ -151,7 +223,12 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 				for object in data.result
 					do(object) =>
-						item = autocompletionPopup.appendItem(resultsContainer, new CUI.Label(text: object.gazId + " - " + object.prefName.title))
+						item = autocompletionPopup.appendItem(resultsContainer,
+							new LocaLabel
+								loca_key: "custom.data.type.gazetteer.search.result.md"
+								loca_key_attrs: object
+								markdown: true
+						)
 						CUI.Events.listen
 							type: "click"
 							node: item
@@ -212,10 +289,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		link = CustomDataTypeGazetteer.PLACE_URL + initData.gazId
 
 		if initData.displayName
-			text = $$("custom.data.type.gazetteer.preview.value",
-				displayName: initData.displayName
-				id: initData.gazId
-			)
+			text = $$("custom.data.type.gazetteer.preview.value", initData)
 		else
 			text = link
 

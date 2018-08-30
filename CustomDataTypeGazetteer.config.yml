@@ -1,9 +1,24 @@
 plugin:
   name: custom-data-type-gazetteer
   version: 1.0
+  url: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer
+  displayname:
+    de-DE: Gazetteer
+    en-US: Gazetteer
+  info:
+    de-DE: Plugin for https://gazetteer.dainst.org
+    en-US: Plugin for https://gazetteer.dainst.org
   server:
     api-version:
       require: 1
   webfrontend:
     url: custom-data-type-gazetteer.js
     l10n: l10n/
+
+custom_types:
+  gazetteer:
+    mapping:
+      gazId:
+        type: text_oneline
+      displayName:
+        type: text
