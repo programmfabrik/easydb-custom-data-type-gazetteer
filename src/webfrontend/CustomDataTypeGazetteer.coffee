@@ -3,6 +3,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 	@SEARCH_API_URL = "https://gazetteer.dainst.org/search.json?limit=20&"
 	@ID_API_URL = "https://gazetteer.dainst.org/doc/"
 	@PLACE_URL = "https://gazetteer.dainst.org/place/"
+	@JSON_EXTENSION = ".json"
 
 	getCustomDataTypeName: ->
 		"custom:base.custom-data-type-gazetteer.gazetteer"
@@ -37,7 +38,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 	renderDetailOutput: (data, _, opts) ->
 		initData = @__initData(data)
 
-		linkButton = @__getButtonLink(initData)
+		linkButton = @__getOutputFieldElement(initData)
 
 		if CUI.Map.isValidPosition(initData.position)
 			plugins = opts.detail.getPlugins()
@@ -59,8 +60,11 @@ class CustomDataTypeGazetteer extends CustomDataType
 		if CUI.util.isEmpty(data)
 			return save_data[@name()] = null
 
-		if CUI.util.isEmpty(data.gazId) or CUI.util.isEmpty(data.displayName)
-			return throw new InvalidSaveDataException()
+		if CUI.util.isEmpty(data.gazId)
+			if CUI.util.isEmpty(data.displayName)
+				return save_data[@name()] = null
+			else
+				return throw new InvalidSaveDataException()
 
 		return save_data[@name()] =
 			displayName: data.displayName
@@ -139,9 +143,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 			xhr = new CUI.XHR
 				method: "GET"
-				url: CustomDataTypeGazetteer.ID_API_URL + formData.gazId
-				headers:
-					"Accept": "application/json, text/plain, */*" # This is necessary by the API of Gazetteer.
+				url: CustomDataTypeGazetteer.ID_API_URL + formData.gazId + CustomDataTypeGazetteer.JSON_EXTENSION
 
 			waitBlock.show()
 			xhr.start().done((object) =>
@@ -279,7 +281,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 	__getOutputFieldElement: (formData) ->
 		if formData.displayName and formData.gazId
 			return @__getButtonLink(formData)
-		else if CUI.util.isFalse(formData.displayName)
+		else if CUI.util.isFalse(formData.displayName) and formData.gazId
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.id-not-found"), class: "ez-label-invalid")
 		else
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
