@@ -33,24 +33,39 @@ class CustomDataTypeGazetteer extends CustomDataType
 	renderEditorInput: (data) ->
 		initData = @__initData(data)
 		form = @__initForm(initData)
+
+		setContent = =>
+			form.start()
+
+		@__fillMissingData(initData).done(setContent)
+
 		form
 
 	renderDetailOutput: (data, _, opts) ->
 		initData = @__initData(data)
 
-		linkButton = @__getOutputFieldElement(initData)
+		content = CUI.dom.div()
+		waitBlock = new CUI.WaitBlock(element: content)
 
-		if CUI.Map.isValidPosition(initData.position)
-			plugins = opts.detail.getPlugins()
-			for plugin in plugins
-				if plugin instanceof MapDetailPlugin
-					mapPlugin = plugin
-					break
+		setContent = =>
+			outputFieldElement = @__getOutputFieldElement(initData)
+			CUI.dom.replace(content, outputFieldElement)
+			waitBlock.destroy()
 
-			if mapPlugin
-				mapPlugin.addMarker(position: initData.position)
+			if CUI.Map.isValidPosition(initData.position)
+				plugins = opts.detail.getPlugins()
+				for plugin in plugins
+					if plugin instanceof MapDetailPlugin
+						mapPlugin = plugin
+						break
 
-		return linkButton
+				if mapPlugin
+					mapPlugin.addMarker(position: initData.position)
+
+		waitBlock.show()
+		@__fillMissingData(initData).done(setContent)
+
+		return content
 
 	renderFieldAsGroup: (_, __, opts) ->
 		return opts.mode == 'editor' or opts.mode == 'editor-template'
@@ -61,10 +76,10 @@ class CustomDataTypeGazetteer extends CustomDataType
 			return save_data[@name()] = null
 
 		if CUI.util.isEmpty(data.gazId)
-			if CUI.util.isEmpty(data.displayName)
-				return save_data[@name()] = null
-			else
-				return throw new InvalidSaveDataException()
+			return save_data[@name()] = null
+
+		if data.notFound
+			return throw new InvalidSaveDataException()
 
 		return save_data[@name()] =
 			displayName: data.displayName
@@ -138,20 +153,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 				label: $$("custom.data.type.gazetteer.search.label")
 
 		searchById = =>
-			if not formData.gazId
-				return
-
-			xhr = new CUI.XHR
-				method: "GET"
-				url: CustomDataTypeGazetteer.ID_API_URL + formData.gazId + CustomDataTypeGazetteer.JSON_EXTENSION
-
-			waitBlock.show()
-			xhr.start().done((object) =>
-				setObjectData(object)
-			).fail( =>
-				# If not found or error, the display name is false, to show a different message and invalid input.
-				formData.displayName = false
-			).always( =>
+			triggerUpdate = ->
 				idField.checkInput()
 
 				CUI.Events.trigger
@@ -160,7 +162,17 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 				outputField.reload()
 				waitBlock.hide()
-			)
+
+			if formData.gazId.length == 0
+				triggerUpdate()
+				return
+
+			waitBlock.show()
+			@__searchById(formData.gazId).done((object) =>
+				cleanFormSetData(object)
+			).fail( =>
+				formData.notFound = true
+			).always(triggerUpdate)
 
 		idField = new CUI.Input
 			name: "gazId"
@@ -169,6 +181,8 @@ class CustomDataTypeGazetteer extends CustomDataType
 			checkInput: => not CUI.util.isEmpty(formData.displayName)
 			onDataChanged: =>
 				delete formData.displayName
+				delete formData.notFound
+
 				CUI.scheduleCallback
 					call: searchById
 					ms: 300
@@ -188,24 +202,14 @@ class CustomDataTypeGazetteer extends CustomDataType
 		autocompletionPopup.addContainer(resultsContainer)
 		autocompletionPopup.addContainer(loadingContainer)
 
-		setObjectData = (object) =>
+		cleanFormSetData = (object) =>
+			formData.q = ""
 			if not object
-				formData.q = ""
 				delete formData.displayName
 				delete formData.gazId
 				delete formData.position
 			else
-				formData.q = ""
-				formData.displayName = object.prefName.title
-				formData.gazId = object.gazId
-
-				if object.prefLocation?.coordinates
-					position =
-						lng: object.prefLocation?.coordinates[0]
-						lat: object.prefLocation?.coordinates[1]
-
-					if CUI.Map.isValidPosition(position)
-						formData.position = position
+				@__setObjectData(formData, object)
 
 		search = =>
 			autocompletionPopup.emptyContainer(resultsContainer)
@@ -237,7 +241,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 							call: (ev) =>
 								ev.stopPropagation()
 
-								setObjectData(object)
+								cleanFormSetData(object)
 
 								searchField.reload()
 								idField.reload()
@@ -267,8 +271,27 @@ class CustomDataTypeGazetteer extends CustomDataType
 					ms: 200
 					call: search
 
-		form.start()
 		form
+
+	# Set the necessary attributes from gazetteer *data* to *object*
+	__setObjectData: (object, data) ->
+		delete object.notFound
+		object.displayName = data.prefName.title
+		object.gazId = data.gazId
+
+		if data.prefLocation?.coordinates
+			position =
+				lng: data.prefLocation?.coordinates[0]
+				lat: data.prefLocation?.coordinates[1]
+
+			if CUI.Map.isValidPosition(position)
+				object.position = position
+
+	__searchById: (id) ->
+		xhr = new CUI.XHR
+			method: "GET"
+			url: CustomDataTypeGazetteer.ID_API_URL + id + CustomDataTypeGazetteer.JSON_EXTENSION
+		return xhr.start()
 
 	__initData: (data) ->
 		if not data[@name()]
@@ -279,13 +302,12 @@ class CustomDataTypeGazetteer extends CustomDataType
 		initData
 
 	__getOutputFieldElement: (formData) ->
-		if formData.displayName and formData.gazId
-			return @__getButtonLink(formData)
-		else if CUI.util.isFalse(formData.displayName) and formData.gazId
+		if formData.notFound
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.id-not-found"), class: "ez-label-invalid")
+		if formData.gazId
+			return @__getButtonLink(formData)
 		else
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
-
 
 	__getButtonLink: (initData) ->
 		link = CustomDataTypeGazetteer.PLACE_URL + initData.gazId
@@ -300,6 +322,19 @@ class CustomDataTypeGazetteer extends CustomDataType
 			text: text
 			href: link
 			target: "_blank"
+
+	# This is the case that the ID is in the data but it was not found before.
+	__fillMissingData: (data) ->
+		if data.gazId and not data.displayName
+			deferred = new CUI.Deferred()
+			@__searchById(data.gazId).done((dataFound) =>
+				@__setObjectData(data, dataFound)
+			).fail( =>
+				data.notFound = true
+			).always(deferred.resolve)
+			return deferred.promise()
+		else
+			return CUI.resolvedPromise()
 
 	isPluginSupported: (plugin) ->
 		if plugin instanceof MapDetailPlugin
