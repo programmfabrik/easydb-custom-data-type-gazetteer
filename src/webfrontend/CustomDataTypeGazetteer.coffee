@@ -65,6 +65,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 		waitBlock.show()
 		@__fillMissingData(initData).done(setContent)
 
+		CUI.Events.listen
+			type: "map-detail-click-location"
+			node: content
+			call: (_, info) =>
+				if info.data?.position == initData.position
+					CUI.dom.scrollIntoView(content)
+
 		return content
 
 	renderFieldAsGroup: (_, __, opts) ->
@@ -145,10 +152,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 	__initForm: (formData) ->
 		resultsContainer = "results"
 		loadingContainer = "loading"
-		loadingLabel = new LocaLabel(loca_key: "autocompletion.loading")
+		noResultsContainer = "no_results"
+		loadingLabel = new LocaLabel(loca_key: "autocompletion.loading", padded: true)
+		noResultsLabel = new LocaLabel(loca_key: "custom.data.type.gazetteer.search.no-results", padded: true)
 
 		searchField = new CUI.Input
 			name: "q"
+			placeholder: $$("custom.data.type.gazetteer.search.placeholder")
 			form:
 				label: $$("custom.data.type.gazetteer.search.label")
 
@@ -201,6 +211,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 				autocompletionPopup.hide()
 		autocompletionPopup.addContainer(resultsContainer)
 		autocompletionPopup.addContainer(loadingContainer)
+		autocompletionPopup.addContainer(noResultsContainer)
 
 		cleanFormSetData = (object) =>
 			formData.q = ""
@@ -211,9 +222,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 			else
 				@__setObjectData(formData, object)
 
+		searchXHR = null
 		search = =>
+			searchXHR?.abort()
 			autocompletionPopup.emptyContainer(resultsContainer)
-			if formData.q.length < 2 # Trigger search with more than 2 characters.
+			autocompletionPopup.emptyContainer(loadingContainer)
+			autocompletionPopup.emptyContainer(noResultsContainer)
+			if formData.q.length == 0 # Trigger search when it is not empty.
 				return
 
 			autocompletionPopup.getContainer(loadingContainer).replace(loadingLabel)
@@ -225,6 +240,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			searchXHR.start().done((data) =>
 				autocompletionPopup.emptyContainer(loadingContainer)
 				if data.result?.length == 0
+					autocompletionPopup.getContainer(noResultsContainer).replace(noResultsLabel)
 					return
 
 				for object in data.result

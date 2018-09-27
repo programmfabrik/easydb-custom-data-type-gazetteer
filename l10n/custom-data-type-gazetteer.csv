@@ -1,6 +1,8 @@
 key,de-DE,en-US,it-IT,es-ES
 custom.data.type.gazetteer.name,Gazetteer,Gazetteer,Gazetteer,Gazetteer
 custom.data.type.gazetteer.search.label,Search,Search,Search,Search
+custom.data.type.gazetteer.search.placeholder,Search a place by name...,Search a place by name...,Search a place by name...,Search a place by name...
+custom.data.type.gazetteer.search.no-results|text,No results found,No results found,No results found,No results found
 custom.data.type.gazetteer.search.result.md,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s
 custom.data.type.gazetteer.preview.label,Preview,Preview,Preview,Preview
 custom.data.type.gazetteer.preview.empty-label,No preview available.,No preview available.,No preview available.,No preview available.
