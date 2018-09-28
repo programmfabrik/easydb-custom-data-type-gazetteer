@@ -11,3 +11,5 @@ custom.data.type.gazetteer.detail-map-button|tooltip,View in map,View in map,Vie
 custom.data.type.gazetteer.id.label,ID,ID,ID,ID
 custom.data.type.gazetteer.preview.id-not-found,ID doesn't exist,ID doesn't exist,ID doesn't exist,ID doesn't exist
 custom.data.type.gazetteer.preview.value,%(gazId)s | %(displayName)s,%(gazId)s | %(displayName)s,%(gazId)s | %(displayName)s,%(gazId)s | %(displayName)s
+custom.data.type.gazetteer.preview.button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
+custom.data.type.gazetteer.preview.button|tooltip,View in map,View in map,View in map,View in map

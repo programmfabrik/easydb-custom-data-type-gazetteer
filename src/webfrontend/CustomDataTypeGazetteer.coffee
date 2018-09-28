@@ -48,7 +48,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		waitBlock = new CUI.WaitBlock(element: content)
 
 		setContent = =>
-			outputFieldElement = @__getOutputFieldElement(initData)
+			outputFieldElement = @__getOutputElement(initData)
 			CUI.dom.replace(content, outputFieldElement)
 			waitBlock.destroy()
 
@@ -201,7 +201,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			name: "displayName"
 			form:
 				label: $$("custom.data.type.gazetteer.preview.label")
-			element: => @__getOutputFieldElement(formData)
+			element: => @__getOutputElement(formData)
 
 		waitBlock = new CUI.WaitBlock(element: outputField)
 
@@ -317,15 +317,15 @@ class CustomDataTypeGazetteer extends CustomDataType
 			initData = data[@name()]
 		initData
 
-	__getOutputFieldElement: (formData) ->
+	__getOutputElement: (formData) ->
 		if formData.notFound
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.id-not-found"), class: "ez-label-invalid")
 		if formData.gazId
-			return @__getButtonLink(formData)
+			return @__getOutputContent(formData)
 		else
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
 
-	__getButtonLink: (initData) ->
+	__getOutputContent: (initData) ->
 		link = CustomDataTypeGazetteer.PLACE_URL + initData.gazId
 
 		if initData.displayName
@@ -333,11 +333,39 @@ class CustomDataTypeGazetteer extends CustomDataType
 		else
 			text = link
 
-		return new CUI.ButtonHref
+		buttonHref = new CUI.ButtonHref
 			appearance: "link"
 			text: text
 			href: link
 			target: "_blank"
+
+		if not CUI.Map.isValidPosition(initData.position)
+			return buttonHref
+
+		buttonPreview = new LocaButton
+			loca_key: "custom.data.type.gazetteer.preview.button"
+			onClick: =>
+				previewPopover = new CUI.Popover
+					element: buttonPreview
+					placement: "sw"
+					pane: @__buildPreviewMap(initData.position)
+					onHide: =>
+						previewPopover.destroy()
+				previewPopover.show()
+
+		return new CUI.HorizontalLayout
+			center:
+				content: buttonHref
+			right:
+				content: buttonPreview
+
+	__buildPreviewMap: (position) ->
+		return new CUI.MapInput.defaults.mapClass(
+			selectedMarkerPosition: position
+			centerPosition: position
+			clickable: false
+			zoom: 10
+		)
 
 	# This is the case that the ID is in the data but it was not found before.
 	__fillMissingData: (data) ->
