@@ -88,12 +88,18 @@ class CustomDataTypeGazetteer extends CustomDataType
 		if data.notFound
 			return throw new InvalidSaveDataException()
 
+		fulltext = data.displayName
+		if data.otherNames?.length > 0
+			data.otherNames.push(fulltext)
+			fulltext = data.otherNames
+
 		return save_data[@name()] =
 			displayName: data.displayName
 			gazId: data.gazId
 			position: data.position
+			otherNames: data.otherNames
 			_fulltext:
-				text: data.displayName
+				text: fulltext
 				string: data.gazId
 			_standard:
 				text: data.displayName
@@ -294,6 +300,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		delete object.notFound
 		object.displayName = data.prefName.title
 		object.gazId = data.gazId
+		object.otherNames = data.names
 
 		if data.prefLocation?.coordinates
 			position =
