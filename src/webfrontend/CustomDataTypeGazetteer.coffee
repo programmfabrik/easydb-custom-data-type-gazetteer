@@ -90,8 +90,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 		fulltext = data.displayName
 		if data.otherNames?.length > 0
-			data.otherNames.push(fulltext)
-			fulltext = data.otherNames
+			fulltext = data.otherNames.map((otherName) -> otherName.title).concat(fulltext)
 
 		return save_data[@name()] =
 			displayName: data.displayName
