@@ -52,7 +52,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			CUI.dom.replace(content, outputFieldElement)
 			waitBlock.destroy()
 
-			if CUI.Map.isValidPosition(initData.position)
+			if CUI.Map.isValidPosition(initData.position) and opts.detail
 				plugins = opts.detail.getPlugins()
 				for plugin in plugins
 					if plugin instanceof MapDetailPlugin
