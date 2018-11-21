@@ -1,0 +1,22 @@
+.ez5-custom-data-type-gazetteer-card {
+  border: solid #174589 1px;
+  padding: 5px;
+
+
+  .cui-horizontal-layout-left {
+    width: 10%;
+    margin-right: 5px;
+
+    img {
+      width: 100%;
+      display:block;
+      margin:auto;
+    }
+  }
+
+  .cui-horizontal-layout-right {
+    .cui-loca-button i {
+      color: #174589;
+    }
+  }
+}

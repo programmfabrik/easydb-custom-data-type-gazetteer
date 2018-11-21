@@ -13,6 +13,8 @@ plugin:
       require: 1
   webfrontend:
     url: custom-data-type-gazetteer.js
+    css: custom-data-type-gazetteer.css
+    logo: image/logo.png
     l10n: l10n/
 
 custom_types:

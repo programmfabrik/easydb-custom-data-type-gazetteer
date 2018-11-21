@@ -48,7 +48,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		waitBlock = new CUI.WaitBlock(element: content)
 
 		setContent = =>
-			outputFieldElement = @__getOutputElement(initData)
+			outputFieldElement = @__renderOutput(initData)
 			CUI.dom.replace(content, outputFieldElement)
 			waitBlock.destroy()
 
@@ -60,7 +60,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 						break
 
 				if mapPlugin
-					mapPlugin.addMarker(position: initData.position)
+					mapPlugin.addMarker(position: initData.position, iconName: initData.iconName, iconColor: "#6786ad")
 
 		waitBlock.show()
 		@__fillMissingData(initData).done(setContent)
@@ -74,8 +74,8 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 		return content
 
-	renderFieldAsGroup: (_, __, opts) ->
-		return opts.mode == 'editor' or opts.mode == 'editor-template'
+	renderFieldAsGroup: ->
+		return false
 
 	getSaveData: (data, save_data) ->
 		data = data[@name()]
@@ -96,7 +96,9 @@ class CustomDataTypeGazetteer extends CustomDataType
 			displayName: data.displayName
 			gazId: data.gazId
 			position: data.position
+			iconName: data.iconName
 			otherNames: data.otherNames
+			types: data.types
 			_fulltext:
 				text: fulltext
 				string: data.gazId
@@ -163,52 +165,8 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 		searchField = new CUI.Input
 			name: "q"
+			hidden: true
 			placeholder: $$("custom.data.type.gazetteer.search.placeholder")
-			form:
-				label: $$("custom.data.type.gazetteer.search.label")
-
-		searchById = =>
-			triggerUpdate = ->
-				idField.checkInput()
-
-				CUI.Events.trigger
-					node: form
-					type: "editor-changed"
-
-				outputField.reload()
-				waitBlock.hide()
-
-			if formData.gazId.length == 0
-				triggerUpdate()
-				return
-
-			waitBlock.show()
-			@__searchById(formData.gazId).done((object) =>
-				cleanFormSetData(object)
-			).fail( =>
-				formData.notFound = true
-			).always(triggerUpdate)
-
-		idField = new CUI.Input
-			name: "gazId"
-			form:
-				label: $$("custom.data.type.gazetteer.id.label")
-			checkInput: => not CUI.util.isEmpty(formData.displayName)
-			onDataChanged: =>
-				delete formData.displayName
-				delete formData.notFound
-
-				CUI.scheduleCallback
-					call: searchById
-					ms: 300
-
-		outputField = new CUI.DataFieldProxy
-			name: "displayName"
-			form:
-				label: $$("custom.data.type.gazetteer.preview.label")
-			element: => @__getOutputElement(formData)
-
-		waitBlock = new CUI.WaitBlock(element: outputField)
 
 		autocompletionPopup = new AutocompletionPopup
 			element: searchField
@@ -218,14 +176,36 @@ class CustomDataTypeGazetteer extends CustomDataType
 		autocompletionPopup.addContainer(loadingContainer)
 		autocompletionPopup.addContainer(noResultsContainer)
 
-		cleanFormSetData = (object) =>
+		outputDiv = CUI.dom.div()
+		outputField = new CUI.DataFieldProxy
+			name: "displayName"
+			hidden: true
+			element: outputDiv
+
+		showOutputField = =>
+			card = @__renderCard(formData, true, =>
+				searchField.show()
+				outputField.hide()
+				cleanData()
+
+				CUI.Events.trigger
+					node: form
+					type: "editor-changed"
+			)
+			CUI.dom.replace(outputDiv, card)
+			outputField.show()
+
+		cleanData = =>
+			delete formData.displayName
+			delete formData.gazId
+			delete formData.otherNames
+			delete formData.types
+			delete formData.position
+			delete formData.iconName
+
+		setData = (object) =>
 			formData.q = ""
-			if not object
-				delete formData.displayName
-				delete formData.gazId
-				delete formData.position
-			else
-				@__setObjectData(formData, object)
+			@__setObjectData(formData, object)
 
 		searchXHR = null
 		search = =>
@@ -237,6 +217,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 				return
 
 			autocompletionPopup.getContainer(loadingContainer).replace(loadingLabel)
+			autocompletionPopup.show()
 
 			searchXHR = new CUI.XHR
 				method: "GET"
@@ -251,10 +232,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 				for object in data.result
 					do(object) =>
 						item = autocompletionPopup.appendItem(resultsContainer,
-							new LocaLabel
-								loca_key: "custom.data.type.gazetteer.search.result.md"
-								loca_key_attrs: object
-								markdown: true
+							@__renderAutocompleteCard(object)
 						)
 						CUI.Events.listen
 							type: "click"
@@ -262,11 +240,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 							call: (ev) =>
 								ev.stopPropagation()
 
-								cleanFormSetData(object)
+								if object
+									setData(object)
+								else
+									cleanData()
 
-								searchField.reload()
-								idField.reload()
-								outputField.reload()
+								searchField.hide()
+								showOutputField()
 
 								autocompletionPopup.hide()
 								CUI.Events.trigger
@@ -274,15 +254,17 @@ class CustomDataTypeGazetteer extends CustomDataType
 									type: "editor-changed"
 
 								return
-				autocompletionPopup.show()
 			)
+
+		if CUI.util.isEmpty(formData)
+			searchField.show()
+		else
+			showOutputField()
 
 		form = new CUI.Form
 			maximize_horizontal: true
 			fields: [
 				searchField
-			,
-				idField
 			,
 				outputField
 			]
@@ -300,6 +282,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		object.displayName = data.prefName.title
 		object.gazId = data.gazId
 		object.otherNames = data.names
+		object.types = data.types or []
 
 		if data.prefLocation?.coordinates
 			position =
@@ -308,6 +291,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 			if CUI.Map.isValidPosition(position)
 				object.position = position
+				object.iconName = if data.prefLocation then "fa-map" else "fa-map-marker"
 
 	__searchById: (id) ->
 		xhr = new CUI.XHR
@@ -323,51 +307,98 @@ class CustomDataTypeGazetteer extends CustomDataType
 			initData = data[@name()]
 		initData
 
-	__getOutputElement: (formData) ->
+	__renderOutput: (formData) ->
 		if formData.notFound
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.id-not-found"), class: "ez-label-invalid")
 		if formData.gazId
-			return @__getOutputContent(formData)
+			return @__renderCard(formData)
 		else
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
 
-	__getOutputContent: (initData) ->
-		link = CustomDataTypeGazetteer.PLACE_URL + initData.gazId
+	__renderAutocompleteCard: (data) ->
+		object = {}
+		@__setObjectData(object, data)
+		@__renderCard(object, false, null, true)
 
-		if initData.displayName
-			text = $$("custom.data.type.gazetteer.preview.value", initData)
-		else
-			text = link
+	__renderCard: (data, editor = false, onDelete, small = false) ->
+		link = CustomDataTypeGazetteer.PLACE_URL + data.gazId
 
-		buttonHref = new CUI.ButtonHref
-			appearance: "link"
-			text: text
-			href: link
-			target: "_blank"
+		menuItems = [
+			new LocaButtonHref
+				loca_key: "custom.data.type.gazetteer.link.button"
+				href: link
+				target: "_blank"
+		]
 
-		if not CUI.Map.isValidPosition(initData.position)
-			return buttonHref
+		if not small
+			if CUI.Map.isValidPosition(data.position)
+				menuItems.push(
+					new LocaButton
+						loca_key: "custom.data.type.gazetteer.preview.button"
+						onClick: =>
+							previewPopover = new CUI.Popover
+								element: menuButton
+								placement: "sw"
+								pane: @__buildPreviewMap(data.position, data.iconName)
+								onHide: =>
+									previewPopover.destroy()
+							previewPopover.show()
+				)
 
-		buttonPreview = new LocaButton
-			loca_key: "custom.data.type.gazetteer.preview.button"
-			onClick: =>
-				previewPopover = new CUI.Popover
-					element: buttonPreview
-					placement: "sw"
-					pane: @__buildPreviewMap(initData.position)
-					onHide: =>
-						previewPopover.destroy()
-				previewPopover.show()
+			if editor
+				menuItems.push(
+					new LocaButton
+						loca_key: "custom.data.type.gazetteer.delete.button"
+						onClick: =>
+							onDelete?()
+				)
 
-		return new CUI.HorizontalLayout
+			menuButton = new LocaButton
+				loca_key: "custom.data.type.gazetteer.menu.button"
+				icon: "ellipsis_v"
+				icon_right: false
+				appearance: "flat"
+				menu:
+					items: menuItems
+
+		content = [
+			new CUI.Label(text: data.displayName, appearance: "title", multiline: true)
+		,
+			new CUI.Label(text: data.gazId, appearance: "secondary", multiline: true)
+		]
+
+		for type in data.types
+			content.push(
+				new CUI.Label(text: $$("custom.data.type.gazetteer.types.#{type}.text"), appearance: "muted", multiline: true)
+			)
+
+		if data.otherNames?.length > 0
+			otherNamesText = data.otherNames.map((otherName) => otherName.title).join(", ")
+			content.push(
+				new CUI.Label(text: otherNamesText, appearance: "muted", multiline: true)
+			)
+
+		layoutOpts =
+			class: "ez5-custom-data-type-gazetteer-card"
 			center:
-				content: buttonHref
-			right:
-				content: buttonPreview
+				content: new CUI.VerticalList(content: content)
 
-	__buildPreviewMap: (position) ->
+		if not small
+			plugin = ez5.pluginManager.getPlugin("custom-data-type-gazetteer")
+			previewImage = new Image()
+			previewImage.src = plugin.getBaseURL() + plugin.getWebfrontend().logo
+
+			layoutOpts.left = content: previewImage
+			layoutOpts.right = content: menuButton
+
+		return new CUI.HorizontalLayout(layoutOpts)
+
+	__buildPreviewMap: (position, iconName) ->
 		return new CUI.MapInput.defaults.mapClass(
 			selectedMarkerPosition: position
+			selectedMarkerOptions:
+				iconName: iconName
+				iconColor: "#6786ad"
 			centerPosition: position
 			clickable: false
 			zoom: 10
@@ -375,7 +406,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 	# This is the case that the ID is in the data but it was not found before.
 	__fillMissingData: (data) ->
-		if data.gazId and not data.displayName
+		if data.gazId and (not data.displayName or not data.types)
 			deferred = new CUI.Deferred()
 			@__searchById(data.gazId).done((dataFound) =>
 				@__setObjectData(data, dataFound)
