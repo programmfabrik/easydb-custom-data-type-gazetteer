@@ -367,10 +367,11 @@ class CustomDataTypeGazetteer extends CustomDataType
 			new CUI.Label(text: data.gazId, appearance: "secondary", multiline: true)
 		]
 
-		for type in data.types
-			content.push(
-				new CUI.Label(text: $$("custom.data.type.gazetteer.types.#{type}.text"), appearance: "muted", multiline: true)
-			)
+		if data.types
+			for type in data.types
+				content.push(
+					new CUI.Label(text: $$("custom.data.type.gazetteer.types.#{type}.text"), appearance: "muted", multiline: true)
+				)
 
 		if data.otherNames?.length > 0
 			otherNamesText = data.otherNames.map((otherName) => otherName.title).join(", ")
