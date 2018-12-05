@@ -389,7 +389,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			previewImage = new Image()
 			previewImage.src = plugin.getBaseURL() + plugin.getWebfrontend().logo
 
-			layoutOpts.left = content: previewImage
+			# layoutOpts.left = content: previewImage
 			layoutOpts.right = content: menuButton
 
 		return new CUI.HorizontalLayout(layoutOpts)
