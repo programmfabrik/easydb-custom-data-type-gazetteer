@@ -380,7 +380,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			)
 
 		layoutOpts =
-			class: "ez5-custom-data-type-gazetteer-card"
+			class: "ez5-field-object ez5-custom-data-type-gazetteer-card"
 			center:
 				content: new CUI.VerticalList(content: content)
 
