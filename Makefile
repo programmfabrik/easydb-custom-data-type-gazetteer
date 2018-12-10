@@ -13,7 +13,7 @@ INSTALL_FILES = \
 	$(WEB)/l10n/en-US.json \
 	$(WEB)/l10n/es-ES.json \
 	$(WEB)/l10n/it-IT.json \
-	$(WEB)/logo.png \
+	$(WEB)/image/logo.png \
 	$(CSS) \
 	$(JS) \
 	CustomDataTypeGazetteer.config.yml
