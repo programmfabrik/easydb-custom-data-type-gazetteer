@@ -362,22 +362,14 @@ class CustomDataTypeGazetteer extends CustomDataType
 					items: menuItems
 
 		content = [
-			new CUI.Label(text: data.displayName, appearance: "title", multiline: true)
-		,
-			new CUI.Label(text: data.gazId, appearance: "secondary", multiline: true)
+			new CUI.Label(text: data.displayName, appearance: "title")
 		]
 
 		if data.types
+			types = []
 			for type in data.types
-				content.push(
-					new CUI.Label(text: $$("custom.data.type.gazetteer.types.#{type}.text"), appearance: "muted", multiline: true)
-				)
-
-		if data.otherNames?.length > 0
-			otherNamesText = data.otherNames.map((otherName) => otherName.title).join(", ")
-			content.push(
-				new CUI.Label(text: otherNamesText, appearance: "muted", multiline: true)
-			)
+				types.push $$("custom.data.type.gazetteer.types.#{type}.text")
+			content.push new CUI.Label(text: types.join(", "), appearance: "secondary")
 
 		layoutOpts =
 			class: "ez5-field-object ez5-custom-data-type-gazetteer-card"
