@@ -385,11 +385,6 @@ class CustomDataTypeGazetteer extends CustomDataType
 				content: new CUI.VerticalList(content: content)
 
 		if not small
-			plugin = ez5.pluginManager.getPlugin("custom-data-type-gazetteer")
-			previewImage = new Image()
-			previewImage.src = plugin.getBaseURL() + plugin.getWebfrontend().logo
-
-			# layoutOpts.left = content: previewImage
 			layoutOpts.right = content: menuButton
 
 		return new CUI.HorizontalLayout(layoutOpts)
