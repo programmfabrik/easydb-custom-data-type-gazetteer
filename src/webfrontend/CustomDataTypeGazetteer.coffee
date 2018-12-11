@@ -380,7 +380,8 @@ class CustomDataTypeGazetteer extends CustomDataType
 				class: "ez5-field-object ez5-custom-data-type-gazetteer-card"
 				center:
 					content: list
-				right = content: menuButton
+				right:
+					content: menuButton
 			)
 
 	__buildPreviewMap: (position, iconName) ->
