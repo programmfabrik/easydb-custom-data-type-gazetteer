@@ -376,8 +376,14 @@ class CustomDataTypeGazetteer extends CustomDataType
 		if small
 			return list
 		else
+			plugin = ez5.pluginManager.getPlugin("custom-data-type-gazetteer")
+			previewImage = new Image()
+			previewImage.src = plugin.getBaseURL() + plugin.getWebfrontend().logo
+
 			return new CUI.HorizontalLayout(
 				class: "ez5-field-object ez5-custom-data-type-gazetteer-card"
+				left:
+					content: previewImage
 				center:
 					content: list
 				right:

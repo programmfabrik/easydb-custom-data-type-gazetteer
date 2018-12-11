@@ -13,6 +13,7 @@ INSTALL_FILES = \
 	$(WEB)/l10n/en-US.json \
 	$(WEB)/l10n/es-ES.json \
 	$(WEB)/l10n/it-IT.json \
+	$(WEB)/image/logo.png \
 	$(CSS) \
 	$(JS) \
 	CustomDataTypeGazetteer.config.yml
@@ -23,8 +24,12 @@ all: build
 
 SCSS_FILES = src/webfrontend/scss/custom-data-type-gazetteer.scss
 
+COPY_LOGO = $(WEB)/image/logo.png
+$(WEB)/image%:
+	cp -f $< $@
+
 include $(EASYDB_LIB)/tools/base-plugins.make
-build: code $(L10N)
+build: code $(L10N) $(COPY_LOGO)
 
 code: $(JS) css
 
