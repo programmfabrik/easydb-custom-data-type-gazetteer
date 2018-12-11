@@ -362,7 +362,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 					items: menuItems
 
 		content = [
-			new CUI.Label(text: data.displayName, appearance: "title")
+			new CUI.Label(text: data.displayName, appearance: "title", multiline: true)
 		]
 
 		if data.types
@@ -371,15 +371,17 @@ class CustomDataTypeGazetteer extends CustomDataType
 				types.push $$("custom.data.type.gazetteer.types.#{type}.text")
 			content.push new CUI.Label(text: types.join(", "), appearance: "secondary")
 
-		layoutOpts =
-			class: "ez5-field-object ez5-custom-data-type-gazetteer-card"
-			center:
-				content: new CUI.VerticalList(content: content)
+		list = new CUI.VerticalList(content: content)
 
-		if not small
-			layoutOpts.right = content: menuButton
-
-		return new CUI.HorizontalLayout(layoutOpts)
+		if small
+			return list
+		else
+			return new CUI.HorizontalLayout(
+				class: "ez5-field-object ez5-custom-data-type-gazetteer-card"
+				center:
+					content: list
+				right = content: menuButton
+			)
 
 	__buildPreviewMap: (position, iconName) ->
 		return new CUI.MapInput.defaults.mapClass(
