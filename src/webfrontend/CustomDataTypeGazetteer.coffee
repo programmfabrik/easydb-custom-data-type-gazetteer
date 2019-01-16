@@ -32,14 +32,15 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 	renderEditorInput: (data) ->
 		initData = @__initData(data)
-		form = @__initForm(initData)
+		[searchInput, displayOutput] = @__initForm(initData)
 
 		setContent = =>
-			form.start()
+			searchInput.start()
+			displayOutput.start()
 
 		@__fillMissingData(initData).done(setContent)
 
-		form
+		new CUI.VerticalList(content: [searchInput, displayOutput])
 
 	renderDetailOutput: (data, _, opts) ->
 		initData = @__initData(data)
@@ -167,6 +168,12 @@ class CustomDataTypeGazetteer extends CustomDataType
 			name: "q"
 			hidden: true
 			placeholder: $$("custom.data.type.gazetteer.search.placeholder")
+			maximize_horizontal: true
+			data: formData
+			onDataChanged: =>
+				CUI.scheduleCallback
+					ms: 200
+					call: search
 
 		autocompletionPopup = new AutocompletionPopup
 			element: searchField
@@ -189,7 +196,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 				cleanData()
 
 				CUI.Events.trigger
-					node: form
+					node: searchField
 					type: "editor-changed"
 			)
 			CUI.dom.replace(outputDiv, card)
@@ -250,7 +257,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 								autocompletionPopup.hide()
 								CUI.Events.trigger
-									node: form
+									node: searchField
 									type: "editor-changed"
 
 								return
@@ -261,20 +268,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		else
 			showOutputField()
 
-		form = new CUI.Form
-			maximize_horizontal: true
-			fields: [
-				searchField
-			,
-				outputField
-			]
-			data: formData
-			onDataChanged: =>
-				CUI.scheduleCallback
-					ms: 200
-					call: search
-
-		form
+		[searchField, outputField]
 
 	# Set the necessary attributes from gazetteer *data* to *object*
 	__setObjectData: (object, data) ->
