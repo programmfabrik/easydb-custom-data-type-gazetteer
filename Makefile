@@ -18,7 +18,9 @@ INSTALL_FILES = \
 	$(JS) \
 	CustomDataTypeGazetteer.config.yml
 
-COFFEE_FILES = src/webfrontend/CustomDataTypeGazetteer.coffee
+COFFEE_FILES = src/webfrontend/CustomDataTypeGazetteer.coffee \
+	src/webfrontend/CasterGazetteer.coffee \
+	src/webfrontend/GazetteerUtil.coffee
 
 all: build
 

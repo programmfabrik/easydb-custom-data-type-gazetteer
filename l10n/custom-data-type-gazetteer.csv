@@ -21,3 +21,5 @@ custom.data.type.gazetteer.types.archaeological-site.text,Archaeological Site,Ar
 custom.data.type.gazetteer.types.archaeological-area.text,Archaeological Area,Archaeological Area,Archaeological Area,Archaeological Area
 custom.data.type.gazetteer.types.continent.text,Continent,Continent,Continent,Continent
 custom.data.type.gazetteer.types.building-institution.text,Building institution,Building institution,Building institution,Building institution
+custom.data.type.gazetteer.name.caster.name,Field with ID to Gazetteer,Field with ID to Gazetteer,,
+custom.data.type.gazetteer.name.caster.description,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,,

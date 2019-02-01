@@ -1,10 +1,5 @@
 class CustomDataTypeGazetteer extends CustomDataType
 
-	@SEARCH_API_URL = "https://gazetteer.dainst.org/search.json?limit=20&"
-	@ID_API_URL = "https://gazetteer.dainst.org/doc/"
-	@PLACE_URL = "https://gazetteer.dainst.org/place/"
-	@JSON_EXTENSION = ".json"
-
 	getCustomDataTypeName: ->
 		"custom:base.custom-data-type-gazetteer.gazetteer"
 
@@ -158,6 +153,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		]
 
 	__initForm: (formData) ->
+		searchData = q: ""
 		resultsContainer = "results"
 		loadingContainer = "loading"
 		noResultsContainer = "no_results"
@@ -169,7 +165,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			hidden: true
 			placeholder: $$("custom.data.type.gazetteer.search.placeholder")
 			maximize_horizontal: true
-			data: formData
+			data: searchData
 			onDataChanged: =>
 				CUI.scheduleCallback
 					ms: 200
@@ -211,8 +207,8 @@ class CustomDataTypeGazetteer extends CustomDataType
 			delete formData.iconName
 
 		setData = (object) =>
-			formData.q = ""
-			@__setObjectData(formData, object)
+			searchData.q = ""
+			ez5.GazetteerUtil.setObjectData(formData, object)
 
 		searchXHR = null
 		search = =>
@@ -220,7 +216,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			autocompletionPopup.emptyContainer(resultsContainer)
 			autocompletionPopup.emptyContainer(loadingContainer)
 			autocompletionPopup.emptyContainer(noResultsContainer)
-			if formData.q.length == 0 # Trigger search when it is not empty.
+			if searchData.q.length == 0 # Trigger search when it is not empty.
 				return
 
 			autocompletionPopup.getContainer(loadingContainer).replace(loadingLabel)
@@ -228,7 +224,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 			searchXHR = new CUI.XHR
 				method: "GET"
-				url: CustomDataTypeGazetteer.SEARCH_API_URL + CUI.encodeUrlData(formData)
+				url: ez5.GazetteerUtil.SEARCH_API_URL + CUI.encodeUrlData(formData)
 
 			searchXHR.start().done((data) =>
 				autocompletionPopup.emptyContainer(loadingContainer)
@@ -270,29 +266,6 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 		[searchField, outputField]
 
-	# Set the necessary attributes from gazetteer *data* to *object*
-	__setObjectData: (object, data) ->
-		delete object.notFound
-		object.displayName = data.prefName.title
-		object.gazId = data.gazId
-		object.otherNames = data.names
-		object.types = data.types or []
-
-		if data.prefLocation?.coordinates
-			position =
-				lng: data.prefLocation?.coordinates[0]
-				lat: data.prefLocation?.coordinates[1]
-
-			if CUI.Map.isValidPosition(position)
-				object.position = position
-				object.iconName = if data.prefLocation then "fa-map" else "fa-map-marker"
-
-	__searchById: (id) ->
-		xhr = new CUI.XHR
-			method: "GET"
-			url: CustomDataTypeGazetteer.ID_API_URL + id + CustomDataTypeGazetteer.JSON_EXTENSION
-		return xhr.start()
-
 	__initData: (data) ->
 		if not data[@name()]
 			initData = {}
@@ -311,11 +284,11 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 	__renderAutocompleteCard: (data) ->
 		object = {}
-		@__setObjectData(object, data)
+		ez5.GazetteerUtil.setObjectData(object, data)
 		@__renderCard(object, false, null, true)
 
 	__renderCard: (data, editor = false, onDelete, small = false) ->
-		link = CustomDataTypeGazetteer.PLACE_URL + data.gazId
+		link = ez5.GazetteerUtil.PLACE_URL + data.gazId
 
 		menuItems = [
 			new LocaButtonHref
@@ -399,8 +372,8 @@ class CustomDataTypeGazetteer extends CustomDataType
 	__fillMissingData: (data) ->
 		if data.gazId and (not data.displayName or not data.types)
 			deferred = new CUI.Deferred()
-			@__searchById(data.gazId).done((dataFound) =>
-				@__setObjectData(data, dataFound)
+			ez5.GazetteerUtil.searchById(data.gazId).done((dataFound) =>
+				ez5.GazetteerUtil.setObjectData(data, dataFound)
 			).fail( =>
 				data.notFound = true
 			).always(deferred.resolve)
