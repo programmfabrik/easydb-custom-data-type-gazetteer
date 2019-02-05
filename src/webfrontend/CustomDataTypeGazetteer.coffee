@@ -185,15 +185,24 @@ class CustomDataTypeGazetteer extends CustomDataType
 			hidden: true
 			element: outputDiv
 
-		showOutputField = =>
-			card = @__renderCard(formData, true, =>
-				searchField.show()
-				outputField.hide()
-				cleanData()
+		onDelete = =>
+			searchField.show()
+			outputField.hide()
+			cleanData()
+			searchField.reload()
 
-				CUI.Events.trigger
-					node: searchField
-					type: "editor-changed"
+			CUI.Events.trigger
+				node: searchField
+				type: "editor-changed"
+
+
+		showOutputField = =>
+			card = @__renderCard(formData, true, onDelete,=>
+					id = formData.gazId
+					onDelete()
+					searchData.q = id
+					searchField.reload()
+					search()
 			)
 			CUI.dom.replace(outputDiv, card)
 			outputField.show()
@@ -224,7 +233,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 			searchXHR = new CUI.XHR
 				method: "GET"
-				url: ez5.GazetteerUtil.SEARCH_API_URL + CUI.encodeUrlData(formData)
+				url: ez5.GazetteerUtil.SEARCH_API_URL + CUI.encodeUrlData(searchData)
 
 			searchXHR.start().done((data) =>
 				autocompletionPopup.emptyContainer(loadingContainer)
@@ -285,9 +294,9 @@ class CustomDataTypeGazetteer extends CustomDataType
 	__renderAutocompleteCard: (data) ->
 		object = {}
 		ez5.GazetteerUtil.setObjectData(object, data)
-		@__renderCard(object, false, null, true)
+		@__renderCard(object, false, null, null, true)
 
-	__renderCard: (data, editor = false, onDelete, small = false) ->
+	__renderCard: (data, editor = false, onDelete, onModify, small = false) ->
 		link = ez5.GazetteerUtil.PLACE_URL + data.gazId
 
 		menuItems = [
@@ -318,6 +327,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 						loca_key: "custom.data.type.gazetteer.delete.button"
 						onClick: =>
 							onDelete?()
+				)
+
+				menuItems.push(
+					new LocaButton
+						loca_key: "custom.data.type.gazetteer.modify.button"
+						onClick: =>
+							onModify?()
 				)
 
 			menuButton = new LocaButton
