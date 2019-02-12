@@ -5,7 +5,7 @@ class ez5.CasterGazetteer extends ez5.CasterPlugin
 			name: $$("custom.data.type.gazetteer.name.caster.name")
 			description: $$("custom.data.type.gazetteer.name.caster.description")
 			canCast: (from, to) =>
-				return from instanceof TextColumn and to instanceof CustomDataTypeGazetteer
+				return from not instanceof LocaTextColumn and from instanceof TextColumn and to instanceof CustomDataTypeGazetteer
 			doCast: (value) =>
 				gazId = CUI.util.getInt(value)
 				if CUI.util.isNull(gazId)
