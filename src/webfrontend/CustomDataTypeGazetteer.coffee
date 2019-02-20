@@ -27,15 +27,23 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 	renderEditorInput: (data) ->
 		initData = @__initData(data)
-		[searchInput, displayOutput] = @__initForm(initData)
+
+		content = CUI.dom.div()
+		waitBlock = new CUI.WaitBlock(element: content)
 
 		setContent = =>
+			[searchInput, displayOutput] = @__initForm(initData)
 			searchInput.start()
 			displayOutput.start()
 
+			CUI.dom.append(content, searchInput)
+			CUI.dom.append(content, displayOutput)
+			waitBlock.destroy()
+
+		waitBlock.show()
 		@__fillMissingData(initData).done(setContent)
 
-		new CUI.VerticalList(content: [searchInput, displayOutput])
+		return content
 
 	renderDetailOutput: (data, _, opts) ->
 		initData = @__initData(data)
@@ -44,7 +52,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		waitBlock = new CUI.WaitBlock(element: content)
 
 		setContent = =>
-			outputFieldElement = @__renderOutput(initData)
+			outputFieldElement = @__renderOutput(data: initData)
 			CUI.dom.replace(content, outputFieldElement)
 			waitBlock.destroy()
 
@@ -197,12 +205,16 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 
 		showOutputField = =>
-			card = @__renderCard(formData, true, onDelete,=>
-					id = formData.gazId
-					onDelete()
-					searchData.q = id
-					searchField.reload()
-					search()
+			card = @__renderOutput(
+					data: formData
+					editor: true
+					onDelete: onDelete
+					onModify: =>
+						id = formData.gazId
+						onDelete()
+						searchData.q = id
+						searchField.reload()
+						search()
 			)
 			CUI.dom.replace(outputDiv, card)
 			outputField.show()
@@ -268,7 +280,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 								return
 			)
 
-		if CUI.util.isEmpty(formData)
+		if CUI.util.isEmpty(formData) or formData.notFound or not formData.gazId
 			searchField.show()
 		else
 			showOutputField()
@@ -283,20 +295,42 @@ class CustomDataTypeGazetteer extends CustomDataType
 			initData = data[@name()]
 		initData
 
-	__renderOutput: (formData) ->
+	__renderOutput: (opts) ->
+		formData = opts.data
 		if formData.notFound
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.id-not-found"), class: "ez-label-invalid")
 		if formData.gazId
-			return @__renderCard(formData)
+			return @__renderCard(opts)
 		else
 			return new CUI.EmptyLabel(text: $$("custom.data.type.gazetteer.preview.empty-label"))
 
 	__renderAutocompleteCard: (data) ->
 		object = {}
 		ez5.GazetteerUtil.setObjectData(object, data)
-		@__renderCard(object, false, null, null, true)
+		@__renderCard(
+			data: object
+			small: true
+		)
 
-	__renderCard: (data, editor = false, onDelete, onModify, small = false) ->
+	__renderCard: (_opts) ->
+		opts = CUI.Element.readOpts(_opts, "CustomDataTypeGazetteer.__renderCard",
+			data:
+				check: "PlainObject"
+				mandatory: true
+			editor:
+				check: Boolean
+				default: false
+			small:
+				check: Boolean
+				default: false
+			onDelete:
+				check: Function
+			onModify:
+				check: Function
+		)
+
+		{data, editor, small, onDelete, onModify} = opts
+
 		link = ez5.GazetteerUtil.PLACE_URL + data.gazId
 
 		menuItems = [
