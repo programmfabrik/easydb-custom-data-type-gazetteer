@@ -394,7 +394,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 			return list
 		else
 			plugin = ez5.pluginManager.getPlugin("custom-data-type-gazetteer")
-			previewImage = new Image()
+			previewImage = new Image(36, 36)
 			previewImage.src = plugin.getBaseURL() + plugin.getWebfrontend().logo
 
 			return new CUI.HorizontalLayout(
