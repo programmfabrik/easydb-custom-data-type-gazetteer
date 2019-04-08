@@ -25,3 +25,5 @@ custom.data.type.gazetteer.types.continent.text,Continent,Continent,Continent,Co
 custom.data.type.gazetteer.types.building-institution.text,Building institution,Building institution,Building institution,Building institution
 custom.data.type.gazetteer.name.caster.name,Field with ID to Gazetteer,Field with ID to Gazetteer,,
 custom.data.type.gazetteer.name.caster.description,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,,
+server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,,
+server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,Update every x days,,

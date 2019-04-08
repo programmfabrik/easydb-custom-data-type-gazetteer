@@ -19,8 +19,23 @@ plugin:
 
 custom_types:
   gazetteer:
+    update:
+      script: testscript.js
+      timeout: 10
+      batch_size: 1000
+      interval_base_config: update_interval_gazetteer.days
     mapping:
       gazId:
         type: text_oneline
       displayName:
         type: text
+
+base_config:
+  - name: update_interval_gazetteer
+    group: update_custom_data_type
+    parameters:
+      days:
+        type: int
+        min: 1
+        default: 1
+        position: 0
