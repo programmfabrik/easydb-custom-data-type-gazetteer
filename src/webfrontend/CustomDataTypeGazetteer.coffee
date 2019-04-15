@@ -92,22 +92,7 @@ class CustomDataTypeGazetteer extends CustomDataType
 		if data.notFound
 			return throw new InvalidSaveDataException()
 
-		fulltext = data.displayName
-		if data.otherNames?.length > 0
-			fulltext = data.otherNames.map((otherName) -> otherName.title).concat(fulltext)
-
-		return save_data[@name()] =
-			displayName: data.displayName
-			gazId: data.gazId
-			position: data.position
-			iconName: data.iconName
-			otherNames: data.otherNames
-			types: data.types
-			_fulltext:
-				text: fulltext
-				string: data.gazId
-			_standard:
-				text: data.displayName
+		return save_data[@name()] = ez5.GazetteerUtil.getSaveDataObject(data)
 
 	getQueryFieldBadge: (data) =>
 		if data["#{@name()}:unset"]

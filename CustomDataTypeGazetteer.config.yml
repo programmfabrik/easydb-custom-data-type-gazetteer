@@ -20,7 +20,7 @@ plugin:
 custom_types:
   gazetteer:
     update:
-      script: testscript.js
+      script: build/scripts/gazetteer-update.js
       timeout: 10
       batch_size: 1000
       interval_base_config: update_interval_gazetteer.days

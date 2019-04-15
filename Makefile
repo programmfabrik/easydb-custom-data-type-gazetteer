@@ -30,8 +30,18 @@ COPY_LOGO = $(WEB)/image/logo.png
 $(WEB)/image%:
 	cp -f $< $@
 
+# Order of files is important.
+UPDATE_SCRIPT_COFFEE_FILES = \
+	src/webfrontend/GazetteerUtil.coffee \
+	src/script/GazetteerUpdate.coffee
+UPDATE_SCRIPT_BUILD_FILE = build/scripts/gazetteer-update.js
+
+${UPDATE_SCRIPT_BUILD_FILE}: $(subst .coffee,.coffee.js,${UPDATE_SCRIPT_COFFEE_FILES})
+	mkdir -p $(dir $@)
+	cat $^ > $@
+
 include $(EASYDB_LIB)/tools/base-plugins.make
-build: code $(L10N) $(COPY_LOGO)
+build: code $(L10N) $(COPY_LOGO) $(UPDATE_SCRIPT_BUILD_FILE)
 
 code: $(JS) css
 

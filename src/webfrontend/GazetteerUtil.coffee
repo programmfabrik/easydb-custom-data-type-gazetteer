@@ -1,6 +1,7 @@
 class ez5.GazetteerUtil
 
 	@SEARCH_API_URL = "https://gazetteer.dainst.org/search.json?limit=20&"
+	@SEARCH_QUERY_API_URL = "https://gazetteer.dainst.org/search.json?q="
 	@ID_API_URL = "https://gazetteer.dainst.org/doc/"
 	@PLACE_URL = "https://gazetteer.dainst.org/place/"
 	@JSON_EXTENSION = ".json"
@@ -9,6 +10,12 @@ class ez5.GazetteerUtil
 		xhr = new CUI.XHR
 			method: "GET"
 			url: ez5.GazetteerUtil.ID_API_URL + id + ez5.GazetteerUtil.JSON_EXTENSION
+		return xhr.start()
+
+	@searchByQuery: (query) ->
+		xhr = new CUI.XHR
+			method: "GET"
+			url: ez5.GazetteerUtil.SEARCH_QUERY_API_URL + query
 		return xhr.start()
 
 	# Set the necessary attributes from gazetteer *data* to *object*
@@ -27,3 +34,23 @@ class ez5.GazetteerUtil
 			if CUI.Map.isValidPosition(position)
 				object.position = position
 				object.iconName = if data.prefLocation then "fa-map" else "fa-map-marker"
+		return object
+
+	@getSaveDataObject: (data) ->
+		fulltext = data.displayName
+		if data.otherNames?.length > 0
+			fulltext = data.otherNames.map((otherName) -> otherName.title).concat(fulltext)
+
+		object =
+			displayName: data.displayName
+			gazId: data.gazId
+			position: data.position
+			iconName: data.iconName
+			otherNames: data.otherNames
+			types: data.types
+			_fulltext:
+				text: fulltext
+				string: data.gazId
+			_standard:
+				text: data.displayName
+		return object
