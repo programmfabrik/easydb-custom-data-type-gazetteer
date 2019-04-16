@@ -12,10 +12,15 @@ class ez5.GazetteerUtil
 			url: ez5.GazetteerUtil.ID_API_URL + id + ez5.GazetteerUtil.JSON_EXTENSION
 		return xhr.start()
 
-	@searchByQuery: (query) ->
-		xhr = new CUI.XHR
+	@searchByQuery: (query, _options = {}) ->
+		options =
 			method: "GET"
 			url: ez5.GazetteerUtil.SEARCH_QUERY_API_URL + query
+
+		CUI.util.mergeMap(options, _options)
+
+		xhr = new CUI.XHR(options)
+
 		return xhr.start()
 
 	# Set the necessary attributes from gazetteer *data* to *object*

@@ -4,7 +4,7 @@ class GazetteerUpdate
 		# TODO: do some checks, maybe check if the library server is reachable
 		objectsToUpdate("OK")
 
-	__updateData: ({objects, server_config, plugin_config}) ->
+	__updateData: ({objects, plugin_config}) ->
 		objectsMap = {}
 		searchIds = []
 		for object in objects
@@ -21,9 +21,12 @@ class GazetteerUpdate
 
 			searchIds.push("_id:#{gazId}")
 
+		timeout = plugin_config.update?.timeout or 0
+		timeout *= 1000 # The configuration is in seconds, so it is multiplied by 1000 to get milliseconds.
+
 		searchQuery = searchIds.join(" OR ")
 		searchQuery = CUI.encodeURIComponentNicely(searchQuery)
-		ez5.GazetteerUtil.searchByQuery(searchQuery).done((data) =>
+		ez5.GazetteerUtil.searchByQuery(searchQuery, timeout: timeout).done((data) =>
 			objectsToUpdate = []
 			gazObjects = data.result
 			for gazObject in gazObjects
