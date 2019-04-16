@@ -35,7 +35,7 @@ class GazetteerUpdate
 				for _object in objectsMap[gazObject.gazId]
 					if not @__hasChanges(_object.data, gazObject)
 						continue
-					_object = ez5.GazetteerUtil.getSaveDataObject(gazObject) # Update the object that has changes.
+					_object.data = ez5.GazetteerUtil.getSaveDataObject(gazObject) # Update the object that has changes.
 					objectsToUpdate.push(_object)
 
 			returnSuccess(objectsToUpdate)
