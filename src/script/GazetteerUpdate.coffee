@@ -1,16 +1,8 @@
 class GazetteerUpdate
 
-	__logError: (statusMessage) ->
-		responseError =
-			status_code: 400
-			status_message: statusMessage
-
-		returnData(responseError)
-
 	__startup: ({server_config, plugin_config}) ->
 		# TODO: do some checks, maybe check if the library server is reachable
-		response = status_code: 200
-		returnData(response)
+		objectsToUpdate("OK")
 
 	__updateData: ({objects, server_config, plugin_config}) ->
 		objectsMap = {}
@@ -43,12 +35,9 @@ class GazetteerUpdate
 					_object = ez5.GazetteerUtil.getSaveDataObject(gazObject) # Update the object that has changes.
 					objectsToUpdate.push(_object)
 
-			result =
-				status_code: 200
-				objects: objectsToUpdate
-			returnData(result)
+			returnSuccess(objectsToUpdate)
 		).fail((e) =>
-			@__logError("Error in search of gazetteer objects. Query: #{searchQuery}. Error: " + e)
+			returnError("Error in search of gazetteer objects. Query: #{searchQuery}. Error: " + e)
 		)
 
 	__hasChanges: (objectOne, objectTwo) ->
@@ -59,12 +48,12 @@ class GazetteerUpdate
 
 	call: (data) ->
 		if not data
-			@__logError("Payload is missing")
+			returnError("Payload is missing")
 			return
 
 		for key in ["action", "server_config", "plugin_config"]
 			if (!data[key])
-				@__logError("key #{key} missing")
+				returnError("key #{key} missing")
 				return
 
 		if (data.action == "startup")
@@ -73,18 +62,18 @@ class GazetteerUpdate
 
 		else if (data.action == "update")
 			if (!data.objects)
-				@__logError("for update: key 'objects' missing")
+				returnError("for update: key 'objects' missing")
 				return
 
 			if (!(data.objects instanceof Array))
-				@__logError("for update: invalid key 'objects': must be array")
+				returnError("for update: invalid key 'objects': must be array")
 				return
 
 			# TODO: check validity of config, plugin (timeout), objects...
 			@__updateData(data)
 			return
 		else
-			@__logError("invalid action " + data.action)
+			returnError("invalid action " + data.action)
 
 
 module.exports = new GazetteerUpdate()
