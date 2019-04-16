@@ -2,7 +2,7 @@ class GazetteerUpdate
 
 	__startup: ({server_config, plugin_config}) ->
 		# TODO: do some checks, maybe check if the library server is reachable
-		objectsToUpdate("OK")
+		returnSuccess("OK")
 
 	__updateData: ({objects, plugin_config}) ->
 		objectsMap = {}
