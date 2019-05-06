@@ -19,6 +19,7 @@ INSTALL_FILES = \
 	CustomDataTypeGazetteer.config.yml
 
 COFFEE_FILES = src/webfrontend/CustomDataTypeGazetteer.coffee \
+	src/webfrontend/CustomBaseConfigGazetteer.coffee \
 	src/webfrontend/CasterGazetteer.coffee \
 	src/webfrontend/GazetteerUtil.coffee
 
