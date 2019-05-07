@@ -1,6 +1,5 @@
 class CustomBaseConfigGazetteer extends BaseConfigPlugin
 	getFieldDefFromParm: (baseConfig, fieldName, def) ->
-		console.log(baseConfig)
 		switch def.plugin_type
 			when "objecttype"
 				field = new ez5.ObjecttypeSelector
