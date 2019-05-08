@@ -2,7 +2,7 @@ class GazetteerUpdate
 
 	__startup: ({server_config, plugin_config}) ->
 		# TODO: do some checks, maybe check if the library server is reachable
-		respondSuccess("OK")
+		respondSuccess({payload: "OK"})
 
 	__updateData: ({objects, plugin_config}) ->
 		objectsMap = {}
@@ -38,7 +38,7 @@ class GazetteerUpdate
 					_object.data = ez5.GazetteerUtil.getSaveDataObject(gazObject) # Update the object that has changes.
 					objectsToUpdate.push(_object)
 
-			respondSuccess(objectsToUpdate)
+			respondSuccess({payload: objectsToUpdate})
 		).fail((e) =>
 			respondError("custom.data.type.gazeteer.update.error.generic", {searchQuery: searchQuery, error: e + ""})
 		)
