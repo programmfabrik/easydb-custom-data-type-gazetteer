@@ -32,11 +32,11 @@ custom_types:
 
 base_config:
   - name: update_interval_gazetteer
-    group: gazetteer_plugin
+    group: update_custom_data_type
     parameters:
       days:
         type: int
-        min: 1
+        min: 0
         default: 1
         position: 0
   - name: gazetteer_plugin_settings
