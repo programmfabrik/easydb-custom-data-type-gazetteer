@@ -2,7 +2,7 @@ class GazetteerUpdate
 
 	__startup: ({server_config, plugin_config}) ->
 		# TODO: do some checks, maybe check if the library server is reachable
-		ez5_node.respondSuccess({payload: "OK"})
+		ez5.respondSuccess({payload: "OK"})
 
 	__updateData: ({objects, plugin_config}) ->
 		objectsMap = {}
@@ -38,9 +38,9 @@ class GazetteerUpdate
 					_object.data = ez5.GazetteerUtil.getSaveDataObject(gazObject) # Update the object that has changes.
 					objectsToUpdate.push(_object)
 
-			ez5_node.respondSuccess({payload: objectsToUpdate})
+			ez5.respondSuccess({payload: objectsToUpdate})
 		).fail((e) =>
-			ez5_node.respondError("custom.data.type.gazeteer.update.error.generic", {searchQuery: searchQuery, error: e + ""})
+			ez5.respondError("custom.data.type.gazeteer.update.error.generic", {searchQuery: searchQuery, error: e + ""})
 		)
 
 	__hasChanges: (objectOne, objectTwo) ->
@@ -51,12 +51,12 @@ class GazetteerUpdate
 
 	main: (data) ->
 		if not data
-			ez5_node.respondError("custom.data.type.gazeteer.update.error.payload-missing")
+			ez5.respondError("custom.data.type.gazeteer.update.error.payload-missing")
 			return
 
 		for key in ["action", "server_config", "plugin_config"]
 			if (!data[key])
-				ez5_node.respondError("custom.data.type.gazeteer.update.error.payload-key-missing", {key: key})
+				ez5.respondError("custom.data.type.gazeteer.update.error.payload-key-missing", {key: key})
 				return
 
 		if (data.action == "startup")
@@ -65,18 +65,18 @@ class GazetteerUpdate
 
 		else if (data.action == "update")
 			if (!data.objects)
-				ez5_node.respondError("custom.data.type.gazeteer.update.error.objects-missing")
+				ez5.respondError("custom.data.type.gazeteer.update.error.objects-missing")
 				return
 
 			if (!(data.objects instanceof Array))
-				ez5_node.respondError("custom.data.type.gazeteer.update.error.objects-not-array")
+				ez5.respondError("custom.data.type.gazeteer.update.error.objects-not-array")
 				return
 
 			# TODO: check validity of config, plugin (timeout), objects...
 			@__updateData(data)
 			return
 		else
-			ez5_node.respondError("custom.data.type.gazeteer.update.error.invalid-action", {action: data.action})
+			ez5.respondError("custom.data.type.gazeteer.update.error.invalid-action", {action: data.action})
 
 
 module.exports = new GazetteerUpdate()
