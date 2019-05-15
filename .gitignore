@@ -5,6 +5,7 @@ build
 *.spec.coffee
 .#*
 \#*\#
+*.pyc
 
 node_modules/
 .idea

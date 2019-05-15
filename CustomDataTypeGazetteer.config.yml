@@ -17,6 +17,9 @@ plugin:
     logo: image/logo.png
     l10n: l10n/
 
+python-2:
+  file: src/server/gazetteer_insert.py
+
 custom_types:
   gazetteer:
     update:

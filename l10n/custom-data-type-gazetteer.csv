@@ -1,39 +1,113 @@
 key,de-DE,en-US,it-IT,es-ES
 custom.data.type.gazetteer.name,Gazetteer,Gazetteer,Gazetteer,Gazetteer
-custom.data.type.gazetteer.search.label,Search,Search,Search,Search
-custom.data.type.gazetteer.search.placeholder,Search a place by name or ID,Search a place by name or ID,Search a place by name or ID,Search a place by name or ID
-custom.data.type.gazetteer.search.no-results|text,No results found,No results found,No results found,No results found
+custom.data.type.gazetteer.search.label,Suche,Search,Search,Search
+custom.data.type.gazetteer.search.placeholder,Suche nach einem Ort mit Name oder ID,Search a place by name or ID,Search a place by name or ID,Search a place by name or ID
+custom.data.type.gazetteer.search.no-results|text,Keine Ergebnisse gefunden,No results found,No results found,No results found
 custom.data.type.gazetteer.search.result.md,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s
-custom.data.type.gazetteer.preview.label,Preview,Preview,Preview,Preview
-custom.data.type.gazetteer.preview.empty-label,No preview available.,No preview available.,No preview available.,No preview available.
+custom.data.type.gazetteer.preview.label,Vorschau,Preview,Preview,Preview
+custom.data.type.gazetteer.preview.empty-label,Keine Vorschau verfügbar,No preview available.,No preview available.,No preview available.
 custom.data.type.gazetteer.detail-map-button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
-custom.data.type.gazetteer.detail-map-button|tooltip,View in map,View in map,View in map,View in map
-custom.data.type.gazetteer.preview.id-not-found,ID doesn't exist,ID doesn't exist,ID doesn't exist,ID doesn't exist
+custom.data.type.gazetteer.detail-map-button|tooltip,In Karte anzeigen,View in map,View in map,View in map
+custom.data.type.gazetteer.preview.id-not-found,ID existiert nicht,ID doesn't exist,ID doesn't exist,ID doesn't exist
 custom.data.type.gazetteer.preview.button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
-custom.data.type.gazetteer.preview.button|text,View in map,View in map,View in map,View in map
+custom.data.type.gazetteer.preview.button|text,In Karte anzeigen,View in map,View in map,View in map
 custom.data.type.gazetteer.link.button|icon,fa-external-link,fa-external-link,fa-external-link,fa-external-link
-custom.data.type.gazetteer.link.button|text,Open link,Open link,Open link,Open link
+custom.data.type.gazetteer.link.button|text,Externen Link öffnen,Open link,Open link,Open link
 custom.data.type.gazetteer.delete.button|icon,fa-trash,fa-trash,fa-trash,fa-trash
-custom.data.type.gazetteer.delete.button|text,Delete,Delete,Delete,Delete
+custom.data.type.gazetteer.delete.button|text,Löschen,Delete,Delete,Delete
 custom.data.type.gazetteer.modify.button|icon,fa-edit,fa-edit,fa-edit,fa-edit
-custom.data.type.gazetteer.modify.button|text,Modify,Modify,Modify,Modify
-custom.data.type.gazetteer.types.populated-place.text,Populated place,Populated place,Populated place,Populated place
-custom.data.type.gazetteer.types.administrative-unit.text,Administrative unit,Administrative unit,Administrative unit,Administrative unit
-custom.data.type.gazetteer.types.archaeological-site.text,Archaeological Site,Archaeological Site,Archaeological Site,Archaeological Site
-custom.data.type.gazetteer.types.archaeological-area.text,Archaeological Area,Archaeological Area,Archaeological Area,Archaeological Area
-custom.data.type.gazetteer.types.continent.text,Continent,Continent,Continent,Continent
-custom.data.type.gazetteer.types.building-institution.text,Building institution,Building institution,Building institution,Building institution
-custom.data.type.gazetteer.name.caster.name,Field with ID to Gazetteer,Field with ID to Gazetteer,,
-custom.data.type.gazetteer.name.caster.description,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,,
-server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,,
-server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,Update every x days,,
-server.config.name.system.update_interval_gazetteer,Update settings,Update settings,,
-server.config.parameter.system.update_interval_gazetteer.days.label,Days,Days,,
-server.config.name.system.gazetteer_plugin_settings,Settings,Settings,,
-server.config.parameter.system.gazetteer_plugin_settings.enabled.checkbox,Enable,Enable,,
-server.config.parameter.system.gazetteer_plugin_settings.enabled.label,Enable,Enable,,
-server.config.group.system.gazetteer_plugin.title,Gazetteer,Gazetteer,,
-server.config.group.system.gazetteer_plugin.introduction,Settings for custom data type Gazetteer,Settings for custom data type Gazetteer,,
-custom.data.type.gazetteer.config.objecttype.label,Object type,Object type,,
-custom.data.type.gazetteer.config.field_from.label,Field from,Field from,,
-custom.data.type.gazetteer.config.field_to.label,Field to,Field to,,
+custom.data.type.gazetteer.modify.button|text,Ändern,Modify,Modify,Modify
+custom.data.type.gazetteer.types.populated-place.text,Bewohnter Ort,Populated place,Populated place,Populated place
+custom.data.type.gazetteer.types.administrative-unit.text,Verwaltungseinheit,Administrative unit,Administrative unit,Administrative unit
+custom.data.type.gazetteer.types.archaeological-site.text,Archäologischer Ort,Archaeological Site,Archaeological Site,Archaeological Site
+custom.data.type.gazetteer.types.archaeological-area.text,Archäologischer Bereich,Archaeological Area,Archaeological Area,Archaeological Area
+custom.data.type.gazetteer.types.continent.text,Kontinent,Continent,Continent,Continent
+custom.data.type.gazetteer.types.building-institution.text,Standort/Institution,Building institution,Building institution,Building institution
+custom.data.type.gazetteer.name.caster.name,Feld mit Gazetteer ID,Field with ID to Gazetteer,Field with ID to Gazetteer,Field with ID to Gazetteer
+custom.data.type.gazetteer.name.caster.description,Gazetteer information mit valider ID suchen,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID
+server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin
+server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,Update every x days,Update every x days,Update every x days
+server.config.name.system.update_interval_gazetteer,Gazetteer Update Einstellungen,Gazetteer Update settings,Gazetteer Update settings,Gazetteer Update settings
+server.config.parameter.system.update_interval_gazetteer.days.label,Tage zwischen Updates,Days between updates,Days between updates,Days between updates
+server.config.name.system.gazetteer_plugin_settings,Automatisches Einfügen von Objekten mit Gazetteer-Feldern,Automatic inserts of objects with Gazetteer fields,Automatic inserts of objects with Gazetteer fields,Automatic inserts of objects with Gazetteer fields
+server.config.name.system.gazetteer_plugin_settings|hint,"Wählen Sie einen hierarchischen Objekttypen sowie Ziel- und Quellfelder, um Gazetteer-Custom-Datatype-Felder zu aktualisieren, und fehlende Elternobjekte automatisch zu erzeugen.
+
+Weitere Informationen: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+
+More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+
+More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+
+More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer"
+server.config.parameter.system.gazetteer_plugin_settings.enabled.checkbox,Aktiviert,Enabled,Enabled,Enabled
+server.config.parameter.system.gazetteer_plugin_settings.enabled.label,-,-,-,-
+server.config.group.system.gazetteer_plugin.title,Gazetteer,Gazetteer,Gazetteer,Gazetteer
+server.config.group.system.gazetteer_plugin.introduction,Einstellungen für Custom Data Type Gazetteer,Settings for custom data type Gazetteer,Settings for custom data type Gazetteer,Settings for custom data type Gazetteer
+custom.data.type.gazetteer.config.objecttype.label,Objekttyp,Object type,Object type,Object type
+custom.data.type.gazetteer.config.field_from.label,Quellfeld,Source field,Source field,Source field
+custom.data.type.gazetteer.config.field_to.label,Zielfeld (vom Typ Gazetteer),Target field of type Gazetteer,Target field of type Gazetteer,Target field of type Gazetteer
+custom.data.type.gazeteer.update.error.generic,"Fehler beim Suchen nach Gazetteer-Objekten.
+
+Query: %(searchQuery)s.
+
+Fehler: %(error)s","Error in search of gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s","Error in search of gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s","Error in search of gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s"
+custom.data.type.gazeteer.update.error.payload-missing,Payload fehlt,Payload is missing,Payload is missing,Payload is missing
+custom.data.type.gazeteer.update.error.objects-missing,Für Update: Wert 'objects' fehlt,for update: key 'objects' missing,for update: key 'objects' missing,for update: key 'objects' missing
+custom.data.type.gazeteer.update.error.objects-not-array,Für Update: Wert 'objects' muss vom Typ 'array' sein,for update: invalid key 'objects': must be array,for update: invalid key 'objects': must be array,for update: invalid key 'objects': must be array
+custom.data.type.gazeteer.update.error.invalid-action,'action' ungültig: %(action)s,Invalid action: %(action)s,Invalid action: %(action)s,Invalid action: %(action)s
+custom.data.type.gazeteer.update.error.payload-key-missing,%(key)s fehlt in der Payload,Missing %(key)s in payload,Missing %(key)s in payload,Missing %(key)s in payload
+error.server.gazetteer_insert.objecttype.not_hierarchical,"Gazetteer Plugin:
+
+Der gewählte Objekttyp kann nicht für den automatischen Update von Gazetteer-Objekten verwendet werden.
+Es können nur hierarchische Objekttypen automatisch aktualisiert werden.
+Wählen Sie einen anderen Objekttyp in den Gazetteer-Einstellungen der Basiskonfiguration aus.","Gazetteer Plugin:
+
+The selected objecttype can not be used for the automatic update of Gazetteer objects.
+Only hierarchical objecttypes can be used for automatic Gazetteer updates.
+Select another objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+
+The selected objecttype can not be used for the automatic update of Gazetteer objects.
+Only hierarchical objecttypes can be used for automatic Gazetteer updates.
+Select another objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+
+The selected objecttype can not be used for the automatic update of Gazetteer objects.
+Only hierarchical objecttypes can be used for automatic Gazetteer updates.
+Select another objecttype in the Gazetteer settings in the base configuration."
+error.server.gazetteer_insert.objecttype.not_set,"Gazetteer Plugin:
+
+Es wurde kein Objekttyp für generierte Gazetteer-Daten ausgewählt.
+Wählen Sie einen hierarchischen Objekttyp in den Gazetteer-Einstellungen der Basiskonfiguration aus.","Gazetteer Plugin:
+
+No objecttype for generated Gazetteer data selected.
+Select an objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+
+No objecttype for generated Gazetteer data selected.
+Select an objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+
+No objecttype for generated Gazetteer data selected.
+Select an objecttype in the Gazetteer settings in the base configuration."
+error.server.gazetteer_insert.field_to.not_set,"Gazetteer Plugin:
+
+Es wurde kein Zielfeld für generierte Gazetteer-Daten ausgewählt.
+Wählen Sie ein Zielfeld in den Gazetteer-Einstellungen der Basiskonfiguration aus.","Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration."
