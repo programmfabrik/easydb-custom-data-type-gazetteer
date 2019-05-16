@@ -12,7 +12,7 @@ class GazetteerUpdate
 				continue
 
 			gazId = object.data.gazId
-			if not gazId
+			if CUI.util.isEmpty(gazId)
 				continue
 
 			if not objectsMap[gazId]
@@ -20,6 +20,9 @@ class GazetteerUpdate
 			objectsMap[gazId].push(object)
 
 			searchIds.push("_id:#{gazId}")
+
+		if searchIds.length == 0
+			return ez5.respondSuccess({payload: []})
 
 		timeout = plugin_config.update?.timeout or 0
 		timeout *= 1000 # The configuration is in seconds, so it is multiplied by 1000 to get milliseconds.
@@ -30,6 +33,9 @@ class GazetteerUpdate
 			objectsToUpdate = []
 			gazObjects = data.result
 			for gazObject in gazObjects
+				if not objectsMap[gazObject.gazId]
+					continue
+
 				gazObject = ez5.GazetteerUtil.setObjectData({}, gazObject)
 
 				for _object in objectsMap[gazObject.gazId]
