@@ -48,6 +48,7 @@ base_config:
       enabled:
         type: bool
         position: 0
+        default: false
       objecttype:
         type: text
         position: 1

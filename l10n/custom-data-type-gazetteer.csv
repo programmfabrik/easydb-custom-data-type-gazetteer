@@ -23,6 +23,8 @@ custom.data.type.gazetteer.types.archaeological-site.text,Archäologischer Ort,A
 custom.data.type.gazetteer.types.archaeological-area.text,Archäologischer Bereich,Archaeological Area,Archaeological Area,Archaeological Area
 custom.data.type.gazetteer.types.continent.text,Kontinent,Continent,Continent,Continent
 custom.data.type.gazetteer.types.building-institution.text,Standort/Institution,Building institution,Building institution,Building institution
+custom.data.type.gazetteer.types.landform.text,Landform,Landform,Landform,Landform
+custom.data.type.gazetteer.types.hydrography.text,Hydrographie,Hydrography,Hydrography,Hydrography
 custom.data.type.gazetteer.name.caster.name,Feld mit Gazetteer ID,Field with ID to Gazetteer,Field with ID to Gazetteer,Field with ID to Gazetteer
 custom.data.type.gazetteer.name.caster.description,Gazetteer information mit valider ID suchen,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID
 server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin
