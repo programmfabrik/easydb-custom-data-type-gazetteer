@@ -15,6 +15,7 @@ INSTALL_FILES = \
 	$(WEB)/l10n/it-IT.json \
 	$(WEB)/image/logo.png \
 	build/scripts/gazetteer-update.js \
+	src/server/gazetteer_insert.py \
 	$(CSS) \
 	$(JS) \
 	CustomDataTypeGazetteer.config.yml
