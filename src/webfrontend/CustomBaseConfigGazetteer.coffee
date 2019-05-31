@@ -8,6 +8,9 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 					show_name: true
 					store_value: "fullname"
 					filter: (objecttype) ->
+						if CUI.util.isString(objecttype.table.id()) # Object types of connector instances.
+							return false
+
 						# The object type is only shown if at least one field is gazetteer.
 						mask = Mask.getMaskByMaskName("_all_fields", objecttype.table.id())
 						objecttype.addMask(mask)
