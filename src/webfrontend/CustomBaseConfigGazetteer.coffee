@@ -11,7 +11,14 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 						# The object type is only shown if at least one field is gazetteer.
 						mask = Mask.getMaskByMaskName("_all_fields", objecttype.table.id())
 						objecttype.addMask(mask)
-						return objecttype.getFields().some((field) -> field instanceof CustomDataTypeGazetteer)
+						hasGazetteerField = objecttype.getFields().some((field) -> field instanceof CustomDataTypeGazetteer)
+						if not hasGazetteerField
+							return
+
+						isRequired = objecttype.getFields().some((field) ->
+							return field.isUnique() or field.isRequired()
+						)
+						return not isRequired
 			when "field_from"
 				field = new ez5.FieldSelector
 					form: label: $$("custom.data.type.gazetteer.config.field_from.label")
