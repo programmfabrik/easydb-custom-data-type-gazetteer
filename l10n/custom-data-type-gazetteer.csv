@@ -27,7 +27,7 @@ custom.data.type.gazetteer.types.landform.text,Landform,Landform,Landform,Landfo
 custom.data.type.gazetteer.types.hydrography.text,Hydrographie,Hydrography,Hydrography,Hydrography
 custom.data.type.gazetteer.name.caster.name,Feld mit Gazetteer ID,Field with ID to Gazetteer,Field with ID to Gazetteer,Field with ID to Gazetteer
 custom.data.type.gazetteer.name.caster.description,Gazetteer information mit valider ID suchen,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID
-custom.data.type.gazetteer.config.field-from-empty-text,Same as target field,Same as target field,Same as target field,El mismo que el campo de destino.
+custom.data.type.gazetteer.config.field-from-empty-text,Gazetteer ID aus Zielfeld verwenden,Same as target field,Same as target field,El mismo que el campo de destino.
 server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin
 server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,Update every x days,Update every x days,Update every x days
 server.config.name.system.update_interval_gazetteer,Gazetteer Update Einstellungen,Gazetteer Update settings,Gazetteer Update settings,Gazetteer Update settings
@@ -35,11 +35,35 @@ server.config.parameter.system.update_interval_gazetteer.days.label,Tage zwische
 server.config.name.system.gazetteer_plugin_settings,Automatisches Einfügen von Objekten mit Gazetteer-Feldern,Automatic inserts of objects with Gazetteer fields,Automatic inserts of objects with Gazetteer fields,Automatic inserts of objects with Gazetteer fields
 server.config.name.system.gazetteer_plugin_settings|hint,"Wählen Sie einen hierarchischen Objekttypen sowie Ziel- und Quellfelder, um Gazetteer-Custom-Datatype-Felder zu aktualisieren, und fehlende Elternobjekte automatisch zu erzeugen.
 
+Bitte beachten Sie folgende Einschränkungen:
+
+* Es können nur Objekttypen ausgewählt werden, die mindestens ein Feld vom Typ Gazetteer besitzen
+* Der Objekttyp muss hierarchisch sein, um die hierarchische Gazetteer-Struktur abbilden zu können
+* Es können keine Objekttypen gewählt werden, die Felder mit Constraints besitzen (abgesehen vom Zielfeld), da das Plugin die Constraints nicht erfüllen kann
+
 Weitere Informationen: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
 
-More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+Please note the following restrictions:
+
+* Only object types can be selected that have at least one Gazetteer type field
+* The object type must be hierarchical to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
 
 More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+
+Please note the following restrictions:
+
+* Only object types can be selected that have at least one Gazetteer type field
+* The object type must be hierarchical to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
+
+More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+
+Please note the following restrictions:
+
+* Only object types can be selected that have at least one Gazetteer type field
+* The object type must be hierarchical to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
 
 More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer"
 server.config.parameter.system.gazetteer_plugin_settings.enabled.checkbox,Aktiviert,Enabled,Enabled,Enabled

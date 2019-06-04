@@ -337,7 +337,8 @@ class GazetteerUpdate(object):
                 return None
 
             return int(_result['id:pkey'])
-        except:
+        except Exception as e:
+            self.logger.warn("Could not create Gazetteer objects: %s", str(e))
             return None
 
 
