@@ -27,6 +27,7 @@ custom.data.type.gazetteer.types.landform.text,Landform,Landform,Landform,Landfo
 custom.data.type.gazetteer.types.hydrography.text,Hydrographie,Hydrography,Hydrography,Hydrography
 custom.data.type.gazetteer.name.caster.name,Feld mit Gazetteer ID,Field with ID to Gazetteer,Field with ID to Gazetteer,Field with ID to Gazetteer
 custom.data.type.gazetteer.name.caster.description,Gazetteer information mit valider ID suchen,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID
+custom.data.type.gazetteer.config.field-from-empty-text,Same as target field,Same as target field,Same as target field,El mismo que el campo de destino.
 server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin
 server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,Update every x days,Update every x days,Update every x days
 server.config.name.system.update_interval_gazetteer,Gazetteer Update Einstellungen,Gazetteer Update settings,Gazetteer Update settings,Gazetteer Update settings
