@@ -67,6 +67,9 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 						if fieldTo not instanceof CustomDataTypeGazetteer
 							return false
 
+						if fieldTo.insideNested()
+							return false
+
 						mask = getMask(fieldTo.table.id())
 						if not mask
 							return false
