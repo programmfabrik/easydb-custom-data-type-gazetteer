@@ -141,9 +141,9 @@ You can find the settings for this plugin at the "Gazetteer" tab of the base con
 * **Object type**
     * Select a hierarchic objecttype from the dropdown menu
     * The objecttypes are prefiltered:
-        * Only object types can be selected that have at least one Gazetteer type field
+        * Only object types can be selected that have at least one Gazetteer type field outside of a nested table
         * The object type must be hierarchical to map the hierarchical Gazetteer structure
-        * No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
+        * No object types can be selected that have fields with **NOT-NULL** or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
 * **Source field**
     * The field where the plugin reads the Gazetteer ID that is used for the search
     * Must be a text field
@@ -164,14 +164,14 @@ A hierarchic objecttype has been configured for the update:
 
 The following Gazetteer entries have already been inserted into the hierarchy:
 
-* World ([ID `2042600`](https://gazetteer.dainst.org/place/2042600))
-    * Europe ([ID `2044223`](https://gazetteer.dainst.org/place/2044223))
-        * Germany ([ID `2044274`](https://gazetteer.dainst.org/place/2044274))
-            * Berlin ([ID `2048564`](https://gazetteer.dainst.org/place/2048564))
+* World (ID [`2042600`](https://gazetteer.dainst.org/place/2042600))
+    * Europe (ID [`2044223`](https://gazetteer.dainst.org/place/2044223))
+        * Germany (ID [`2044274`](https://gazetteer.dainst.org/place/2044274))
+            * Berlin (ID [`2048564`](https://gazetteer.dainst.org/place/2048564))
 
 ----
 
-**1)** A new `gazetteer_data` object with the Gazetteer [ID `2052755`](https://gazetteer.dainst.org/place/2052755) (for the city of Hamburg) in field `gazetteer_id` is inserted.
+**1)** A new `gazetteer_data` object with the Gazetteer ID [`2052755`](https://gazetteer.dainst.org/place/2052755) (for the city of Hamburg) in field `gazetteer_id` is inserted.
 
 The plugin will search for the ID and find the custom data, as well as the parents. Since the parent *Germany* is already in the hierarchy, the new Object will be inserted directly at this position:
 
@@ -181,11 +181,11 @@ The plugin will search for the ID and find the custom data, as well as the paren
     * Europe
         * Germany
             * Berlin
-            * *Hamburg ([ID `2052755`](https://gazetteer.dainst.org/place/2052755))*
+            * *Hamburg (ID [`2052755`](https://gazetteer.dainst.org/place/2052755))*
 
 ----
 
-**2)** A new `gazetteer_data` object with the Gazetteer [ID `2347833`](https://gazetteer.dainst.org/place/2347833) (for the city of Hanoi in Vietnam) in field `gazetteer_id` is inserted.
+**2)** A new `gazetteer_data` object with the Gazetteer ID [`2347833`](https://gazetteer.dainst.org/place/2347833) (for the city of Hanoi in Vietnam) in field `gazetteer_id` is inserted.
 
 After searching for the custom data and the parents, there is no direct parent for this Gazetteer entry yet. The plugin searches the deepest existing parent, in this case *World*. The missing parents *Asia* and *Vietnam* are created by the plugin and inserted into the tree:
 
@@ -196,7 +196,7 @@ After searching for the custom data and the parents, there is no direct parent f
         * Germany
             * Berlin
             * Hamburg
-    * **Asia ([ID `2042932`](https://gazetteer.dainst.org/place/2042932))**
-        * **Vietnam ([ID `2281934`](https://gazetteer.dainst.org/place/2281934))**
-            * *Hanoi ([ID `2347833`](https://gazetteer.dainst.org/place/2347833))*
+    * **Asia (ID [`2042932`](https://gazetteer.dainst.org/place/2042932))**
+        * **Vietnam (ID [`2281934`](https://gazetteer.dainst.org/place/2281934))**
+            * *Hanoi (ID [`2347833`](https://gazetteer.dainst.org/place/2347833))*
 ----
