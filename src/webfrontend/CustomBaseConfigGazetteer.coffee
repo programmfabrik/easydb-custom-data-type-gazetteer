@@ -5,9 +5,9 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 				return false
 			return Mask.getMaskByMaskName("_all_fields", idTable)
 
-		getUniqueRequiredFields = (objecttype) ->
+		getTopLevelRequiredFields = (objecttype) ->
 			return objecttype.getFields().filter((field) ->
-				return field.isUnique() or field.isRequired()
+				return field.isTopLevelField() and field.isRequired()
 			)
 
 		switch def.plugin_type
@@ -18,6 +18,9 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 					show_name: true
 					store_value: "fullname"
 					filter: (objecttype) ->
+						if not objecttype.isHierarchy()
+							return false
+
 						# The object type is only shown if at least one field is gazetteer.
 						mask = getMask(objecttype.table.id())
 						if not mask
@@ -28,7 +31,7 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 						if not hasGazetteerField
 							return false
 
-						requiredUniqueFields = getUniqueRequiredFields(objecttype)
+						requiredUniqueFields = getTopLevelRequiredFields(objecttype)
 						if requiredUniqueFields.length == 0
 							return true
 
@@ -69,7 +72,7 @@ class CustomBaseConfigGazetteer extends BaseConfigPlugin
 							return false
 
 						objecttype = new Objecttype(mask)
-						requiredUniqueFields = getUniqueRequiredFields(objecttype) # It will always return 1 or 0 fields.
+						requiredUniqueFields = getTopLevelRequiredFields(objecttype) # It will always return 1 or 0 fields.
 						if requiredUniqueFields.length == 0
 							return true
 
