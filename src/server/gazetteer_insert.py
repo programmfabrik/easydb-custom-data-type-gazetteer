@@ -197,6 +197,9 @@ class GazetteerUpdate(object):
                     continue
 
             _response = self.load_gazetteer(easydb_context, _gazetteer_id)
+            if _response is None:
+                self.logger.warn('did not get a response from server for gazetteer id \'%s\'' % _gazetteer_id)
+                return data
 
             _objects = []
             if 'gazId' in _response:
@@ -279,6 +282,8 @@ class GazetteerUpdate(object):
         _statuscode, _response = self.search_by_query([_gaz_id])
         if _statuscode != 200:
             raise GazetteerError('repository.response_error', 'statuscode: %s, response: "%s"' % (_statuscode, str(_response)))
+        if not isinstance(_response, list):
+            raise GazetteerError('repository.response_error', 'statuscode: %s, response must be an array"' % _statuscode)
 
         if len(_response) > 0:
             return _response[0]
