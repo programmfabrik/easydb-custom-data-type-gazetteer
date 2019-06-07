@@ -6,31 +6,12 @@ import urllib2
 import sys
 import traceback
 from datetime import datetime, date
-from context import EasydbException, EasydbError, ServerError, get_json_value
+from context import EasydbException, EasydbError, ServerError, UserError, get_json_value
 
+sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../easydb-library/src/python')
+# sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../../easydb-webhook-plugin/easydb-library/src/python')
+import noderunner
 
-def handle_exceptions(func):
-    def func_wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except EasydbException as e:
-            raise e
-        except EasydbError as e:
-            raise e
-        except BaseException as e:
-            exc_info = sys.exc_info()
-            stack = traceback.extract_stack()
-            tb = traceback.extract_tb(exc_info[2])
-            full_tb = stack[:-1] + tb
-            exc_line = traceback.format_exception_only(*exc_info[:2])
-            traceback_info = '\n'.join([
-                'Traceback (most recent call last)',
-                ''.join(traceback.format_list(full_tb)),
-                ''.join(exc_line)
-            ])
-            print (traceback_info)
-            raise EasydbException('internal error', traceback_info)
-    return func_wrapper
 
 
 def get_string_from_baseconfig(db_cursor, class_str, key_str, parameter_str):
@@ -68,7 +49,6 @@ def get_from_baseconfig(db_cursor, value_column, class_str, key_str, parameter_s
         return None
 
 
-@handle_exceptions
 def easydb_server_start(easydb_context):
 
     logger = easydb_context.get_logger('base.custom_data_type_gazetteer')
@@ -85,20 +65,17 @@ def pre_update(easydb_context, easydb_info):
 
 class GazetteerError(ServerError):
 
-    def __init__(self, type_str, description = None):
+    def __init__(self, type_str, description=None):
         super(GazetteerError, self).__init__('gazetteer_insert.' + type_str, description, None)
 
 
 class GazetteerUpdate(object):
-
 
     def __init__(self):
         self.query_url = 'https://gazetteer.dainst.org/search.json'
         self.query_suffix = '&add=parents&noPolygons=1'
         self.place_url = 'https://gazetteer.dainst.org/place/'
 
-
-    @handle_exceptions
     def update(self, easydb_context, easydb_info):
 
         self.logger = easydb_context.get_logger('base.custom_data_type_gazetteer')
@@ -116,11 +93,13 @@ class GazetteerUpdate(object):
 
         self.objecttype = get_string_from_baseconfig(self.db_cursor, 'system', 'gazetteer_plugin_settings', 'objecttype')
         if self.objecttype is None:
-            raise GazetteerError('objecttype.not_set')
+            self.logger.debug('automatic update enabled, but no objecttype selected')
+            return data
 
         self.logger.debug('objecttype: %s' % self.objecttype)
 
-        _dm = easydb_context.get_datamodel(show_easy_pool_link=True, show_is_hierarchical=True)
+        _dm = easydb_context.get_datamodel(
+            show_easy_pool_link=True, show_is_hierarchical=True)
         self.objecttype_id = None
         self.easy_pool_link = None
 
@@ -163,7 +142,16 @@ class GazetteerUpdate(object):
         else:
             self.logger.debug('field_from not set, will use field_to %s' % self.field_to)
 
-        self.gazetteer_cache = {}
+        self.node_runner_binary, self.node_runner_app, self.node_env = noderunner.get_paths(easydb_context.get_config())
+        self.script = "%s/../../build/scripts/gazetteer-update.js" % os.path.abspath(
+            os.path.dirname(__file__))
+
+        if self.node_runner_binary is None:
+            raise UserError('base.custom_data_type_gazetteer.user.error.node_runner_binary_not_found')
+        if self.node_runner_app is None:
+            raise UserError('base.custom_data_type_gazetteer.user.error.node_runner_app_not_found')
+
+        on_update = get_bool_from_baseconfig(self.db_cursor, 'system', 'gazetteer_plugin_settings', 'on_update')
 
         for i in range(len(data)):
 
@@ -175,6 +163,20 @@ class GazetteerUpdate(object):
                 self.logger.debug('data[%s]["_objecttype"] != %s -> skip' % (i, self.objecttype))
                 continue
 
+            if not self.objecttype in data[i]:
+                self.logger.debug('data[%s][%s] not found -> skip' % (i, self.objecttype))
+                continue
+
+            if on_update:
+                if not '_version' in data[i][self.objecttype]:
+                    self.logger.debug('on_update is enabled, but could not find _version in data[%s] -> skip' % i)
+                    continue
+
+                if data[i]['_version'][self.objecttype] != 1:
+                    self.logger.debug('on_update is enabled, but _version of data[%s] = %s -> no insert -> skip'
+                        % (i, data[i]['_version']))
+                    continue
+
             _pool_id = None
             if self.easy_pool_link:
                 _pool_id = get_json_value(data[i], '%s._pool.pool._id' % self.objecttype)
@@ -183,51 +185,72 @@ class GazetteerUpdate(object):
                     continue
                 self.logger.debug('pool id: %s' % _pool_id)
 
-            if not self.objecttype in data[i]:
-                self.logger.debug('data[%s][%s] not found -> skip' % (i, self.objecttype))
-                continue
-
-            _gazetteer_id = get_json_value(data[i], '%s.%s' % (self.objecttype, self.field_from)) if self.field_from is not None else None
+            _gazetteer_id = get_json_value(data[i], '%s.%s'
+                % (self.objecttype, self.field_from)) if self.field_from is not None else None
             self.logger.debug('data.%s.%s.%s: \'%s\'' % (i, self.objecttype, self.field_from, str(_gazetteer_id)))
             if _gazetteer_id is None:
                 _gazetteer_id = get_json_value(data[i], '%s.%s.gazId' % (self.objecttype, self.field_to))
                 self.logger.debug('data.%s.%s.%s.gazId: \'%s\'' % (i, self.objecttype, self.field_to, str(_gazetteer_id)))
                 if _gazetteer_id is None:
-                    self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip' % (i, self.objecttype, self.field_from, self.field_to))
+                    self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
+                        % (i, self.objecttype, self.field_from, self.field_to))
                     continue
 
-            _response, _parents = self.load_gazetteer(easydb_context, _gazetteer_id)
+            _response = self.load_gazetteer(easydb_context, _gazetteer_id)
+
+            _objects = []
+            if 'gazId' in _response:
+                _objects = [{
+                    'id': 1,
+                    'gazId': str(_response['gazId'])
+                }]
+            else:
+                self.logger.warn('could not find \'gazId\' in response for query for gazetteer id %s' % _gazetteer_id)
+                return data
+
+            if 'parents' in _response:
+                for p in range(len(_response['parents'])):
+                    if 'gazId' in _response['parents'][p]:
+                        _objects.append({
+                            'id': p + 2,
+                            'gazId': str(_response['parents'][p]['gazId'])
+                        })
+
             _objects_to_index = set()
 
+            _formatted_data = self.format_custom_data(_objects)
+            if len(_formatted_data) < 1:
+                self.logger.warn('did not get any formatted data from node_runner')
+                return data
+
             _parent_id = None
-            if _parents is not None:
-                self.logger.debug('gazetteer object has %d parents' % len(_parents))
-                k = len(_parents) - 1
-                while k >= 0:
-                    _object_id, _owner_id = self.exists_gazetteer_object(
-                        _parents[k])
+            if len(_formatted_data) > 1:
+                self.logger.debug('gazetteer object has %d parents' % (len(_formatted_data) - 1))
+                k = len(_formatted_data) - 1
+                while k >= 1:
+                    _object_id, _owner_id = self.exists_gazetteer_object(_formatted_data[k])
                     if _owner_id is None:
                         _owner_id = 1  # assume root user
                     if _object_id is None:
                         # object does not exist yet, create new object
-                        _object_id = self.create_gazetteer_object(
-                            _parents[k], _owner_id, _parent_id, _pool_id)
-                        self.logger.debug('inserted new object %s:%s' % (self.objecttype, _object_id))
+                        _object_id = self.create_gazetteer_object(_formatted_data[k], _owner_id, _parent_id, _pool_id)
+                        self.logger.debug('inserted new object %s:%s (parent: %s)' % (self.objecttype, _object_id, _parent_id))
                         _objects_to_index.add(_object_id)
                     _parent_id = _object_id
                     self.logger.debug('parent id: %s' % _parent_id)
                     k -= 1
+
 
             easydb_context.update_user_objects(self.objecttype, list(_objects_to_index))
 
             data[i][self.objecttype]['_id_parent'] = _parent_id
 
             data[i]['_mask'] = '_all_fields'
-            data[i][self.objecttype][self.field_to] = _response
-            self.logger.debug('data.%s.%s.%s updated with custom data from gazetteer repository' % (i, self.objecttype, self.field_to))
+            data[i][self.objecttype][self.field_to] = _formatted_data[0]
+            self.logger.debug('data.%s.%s.%s updated with custom data from gazetteer repository'
+                % (i, self.objecttype, self.field_to))
 
         return data
-
 
     def search_by_query(self, gazetteer_ids):
         try:
@@ -250,35 +273,17 @@ class GazetteerUpdate(object):
             self.logger.warn('could not get response for query \'%s\': %s' % (_query, str(e)))
             return 500, str(e)
 
-
     def load_gazetteer(self, easydb_context, gazetteer_id):
-        try:
+        _gaz_id = unicode(gazetteer_id)
 
-            if not isinstance(gazetteer_id, unicode):
-                _gaz_id = unicode(gazetteer_id)
-            else:
-                _gaz_id = gazetteer_id
+        _statuscode, _response = self.search_by_query([_gaz_id])
+        if _statuscode != 200:
+            raise GazetteerError('repository.response_error', 'statuscode: %s, response: "%s"' % (_statuscode, str(_response)))
 
-            if _gaz_id in self.gazetteer_cache:
-                self.logger.debug('return data for gazetteer id %s from cache' % _gaz_id)
-                return self.gazetteer_cache[_gaz_id][0], self.gazetteer_cache[_gaz_id][1]
+        if len(_response) > 0:
+            return _response[0]
 
-            _statuscode, _response = self.search_by_query([_gaz_id])
-            if _statuscode != 200:
-                raise GazetteerError('repository.response_error',
-                    'statuscode: %d, response: "%s"' % (_statuscode, str(_response)))
-
-            if len(_response) > 0:
-                _data, _parents = self.format_custom_data(_response[0], True)
-
-            self.gazetteer_cache[_gaz_id] = _data
-
-            return _data, _parents
-
-        except GazetteerError as e:
-            raise e
-        except:
-            return None, None
+        return None
 
 
     def exists_gazetteer_object(self, gazetteer_data):
@@ -302,13 +307,8 @@ class GazetteerUpdate(object):
         except:
             return None, None
 
-
     def create_gazetteer_object(self, gazetteer_data, owner_id, parent_id=None, pool_id=None):
         try:
-            _data = self.format_custom_data(gazetteer_data)
-            if _data is None:
-                return None
-
             _cols = []
             _values = []
 
@@ -324,7 +324,7 @@ class GazetteerUpdate(object):
             _values.append(str(owner_id))
 
             _cols.append('"%s"' % self.field_to)
-            _values.append('\'%s\'' % json.dumps(_data, indent=4))
+            _values.append('\'%s\'' % json.dumps(gazetteer_data, indent=4))
 
             self.db_cursor.execute("""
                 INSERT INTO %s (%s)
@@ -338,11 +338,9 @@ class GazetteerUpdate(object):
 
             return int(_result['id:pkey'])
         except Exception as e:
-            self.logger.warn("Could not create Gazetteer objects: %s", str(e))
+            self.logger.warn("Could not create Gazetteer objects: %s" % str(e))
             return None
 
-
-    @handle_exceptions
     def insert_object_job(self, object_id):
         try:
             self.db_cursor.execute("""
@@ -365,55 +363,58 @@ class GazetteerUpdate(object):
         except:
             return False
 
+    def format_custom_data(self, gazetteer_data):
 
-    @handle_exceptions
-    def format_custom_data(self, gazetteer_data, load_parents=False):
-
-        for k in ['gazId', 'prefName']:
-            if not k in gazetteer_data:
-                return None
-
-        _gaz_id = gazetteer_data['gazId']
-
-        _custom_data = {
-            'gazId': _gaz_id,
-            'iconName': 'fa-map',
-            '_fulltext': {
-                'string': _gaz_id,
-                'text': []
-            },
-            '_standard': {}
+        _payload = {
+            'action': 'update',
+            'server_config': {},
+            'plugin_config': {},
+            'objects': [
+                {
+                    'identifier': gazetteer_data[i]['id'],
+                    'data': {
+                        'gazId': gazetteer_data[i]['gazId']
+                    }
+                }
+                for i in range(len(gazetteer_data))
+            ]
         }
 
-        if 'title' in gazetteer_data['prefName']:
-            _custom_data['displayName'] = gazetteer_data['prefName']['title']
-            _custom_data['_standard']['text'] = gazetteer_data['prefName']['title']
+        out, exit_code = noderunner.call(
+            self.node_runner_binary,
+            self.node_env,
+            [self.node_runner_app, self.script, "%s" %
+                json.dumps(_payload, separators=(',', ':'))]
+        )
 
-        if 'names' in gazetteer_data:
-            if isinstance(gazetteer_data['names'], list) and len(gazetteer_data['names']) > 0:
-                _custom_data['otherNames'] = gazetteer_data['names']
+        if exit_code != 0:
+            self.logger.warn(
+                'could not get formatted gazetteer data from node_runner: %s' % str(out))
+            return []
 
-                for n in gazetteer_data['names']:
-                    if 'title' in n and not n['title'] in _custom_data['_fulltext']['text']:
-                        _custom_data['_fulltext']['text'].append(n['title'])
+        try:
+            content = json.loads(out)
+            if not 'body' in content:
+                raise Exception('\'body\' not in node_runner response')
 
-        if 'types' in gazetteer_data:
-            if isinstance(gazetteer_data['types'], list) and len(gazetteer_data['types']) > 0:
-                _custom_data['types'] = gazetteer_data['types']
+            body = json.loads(content['body'])
+            if not 'payload' in body:
+                raise Exception('\'body.payload\' not in node_runner response')
+            payload = body['payload']
+            if not isinstance(payload, list):
+                raise Exception('\'body.payload\' in node_runner response must be array')
+            if len(payload) < 1:
+                raise Exception('\'body.payload\' in node_runner response is empty')
 
-        if 'prefLocation' in gazetteer_data:
-            if 'coordinates' in gazetteer_data['prefLocation']:
-                if isinstance(gazetteer_data['prefLocation']['coordinates'], list) and len(gazetteer_data['prefLocation']['coordinates']) == 2:
-                    _custom_data['position'] = {
-                        'lng': gazetteer_data['prefLocation']['coordinates'][0],
-                        'lat': gazetteer_data['prefLocation']['coordinates'][1]
-                    }
+            payload.sort(cmp=self.sort_by_identifier)
 
-        if not load_parents:
-            return _custom_data
+            return [p['data'] for p in payload if 'data' in p]
 
-        _parents = None
-        if 'parents' in gazetteer_data:
-            _parents = gazetteer_data['parents']
+        except Exception as e:
+            self.logger.warn(
+                'could not format gazetteer data from node_runner response: %s' % str(e))
+            return []
 
-        return _custom_data, _parents
+
+    def sort_by_identifier(self, a, b):
+        return a['identifier'] - b['identifier']

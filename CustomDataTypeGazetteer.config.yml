@@ -61,3 +61,7 @@ base_config:
         type: text
         position: 3
         plugin_type: "field_to"
+      on_update:
+        type: bool
+        position: 4
+        default: false

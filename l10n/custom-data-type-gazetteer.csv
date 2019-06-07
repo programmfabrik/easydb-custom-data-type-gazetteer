@@ -37,33 +37,33 @@ server.config.name.system.gazetteer_plugin_settings|hint,"Wählen Sie einen hier
 
 Bitte beachten Sie folgende Einschränkungen:
 
-* Es können nur Objekttypen ausgewählt werden, die mindestens ein Feld vom Typ Gazetteer besitzen
+* Es können nur Objekttypen ausgewählt werden, die mindestens ein Feld vom Typ Gazetteer (außerhalb von Mehrfachfeldern) besitzen
 * Der Objekttyp muss hierarchisch sein, um die hierarchische Gazetteer-Struktur abbilden zu können
-* Es können keine Objekttypen gewählt werden, die Felder mit Constraints besitzen (abgesehen vom Zielfeld), da das Plugin die Constraints nicht erfüllen kann
+* Es können keine Objekttypen gewählt werden, die Felder mit NOT-NULL- oder Check-Constraints besitzen (abgesehen von Feldern in Mehrfachfeldern, oder dem Zielfeld), da das Plugin die Constraints nicht erfüllen kann
 
 Weitere Informationen: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
 
 Please note the following restrictions:
 
-* Only object types can be selected that have at least one Gazetteer type field
+* Only object types can be selected that have at least one Gazetteer type field outside of a nested table
 * The object type must be hierarchical to map the hierarchical Gazetteer structure
-* No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
+* No object types can be selected that have fields with NOT-NULL or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
 
 More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
 
 Please note the following restrictions:
 
-* Only object types can be selected that have at least one Gazetteer type field
+* Only object types can be selected that have at least one Gazetteer type field outside of a nested table
 * The object type must be hierarchical to map the hierarchical Gazetteer structure
-* No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
+* No object types can be selected that have fields with NOT-NULL or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
 
 More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
 
 Please note the following restrictions:
 
-* Only object types can be selected that have at least one Gazetteer type field
+* Only object types can be selected that have at least one Gazetteer type field outside of a nested table
 * The object type must be hierarchical to map the hierarchical Gazetteer structure
-* No object types can be selected that have fields with constraints (apart from the target field), as the plugin cannot fulfill the constraints
+* No object types can be selected that have fields with NOT-NULL or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
 
 More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer"
 server.config.parameter.system.gazetteer_plugin_settings.enabled.checkbox,Aktiviert,Enabled,Enabled,Enabled
