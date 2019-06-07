@@ -7,11 +7,8 @@ import sys
 import traceback
 from datetime import datetime, date
 from context import EasydbException, EasydbError, ServerError, UserError, get_json_value
-
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../easydb-library/src/python')
-# sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../../easydb-webhook-plugin/easydb-library/src/python')
-import noderunner
-
+from noderunner import call as noderunner_call
 
 
 def get_string_from_baseconfig(db_cursor, class_str, key_str, parameter_str):
@@ -142,14 +139,8 @@ class GazetteerUpdate(object):
         else:
             self.logger.debug('field_from not set, will use field_to %s' % self.field_to)
 
-        self.node_runner_binary, self.node_runner_app, self.node_env = noderunner.get_paths(easydb_context.get_config())
-        self.script = "%s/../../build/scripts/gazetteer-update.js" % os.path.abspath(
-            os.path.dirname(__file__))
-
-        if self.node_runner_binary is None:
-            raise UserError('base.custom_data_type_gazetteer.user.error.node_runner_binary_not_found')
-        if self.node_runner_app is None:
-            raise UserError('base.custom_data_type_gazetteer.user.error.node_runner_app_not_found')
+        self.script = "%s/../../build/scripts/gazetteer-update.js" % os.path.abspath(os.path.dirname(__file__))
+        self.config = easydb_context.get_config()
 
         on_update = get_bool_from_baseconfig(self.db_cursor, 'system', 'gazetteer_plugin_settings', 'on_update')
 
@@ -385,16 +376,11 @@ class GazetteerUpdate(object):
             ]
         }
 
-        out, exit_code = noderunner.call(
-            self.node_runner_binary,
-            self.node_env,
-            [self.node_runner_app, self.script, "%s" %
-                json.dumps(_payload, separators=(',', ':'))]
-        )
+        out, err, exit_code = noderunner_call(self.config, self.script, [json.dumps(_payload)])
 
         if exit_code != 0:
             self.logger.warn(
-                'could not get formatted gazetteer data from node_runner: %s' % str(out))
+                'could not get formatted gazetteer data from node_runner: %s' % str(err))
             return []
 
         try:
