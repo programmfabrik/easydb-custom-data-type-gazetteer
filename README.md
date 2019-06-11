@@ -151,6 +151,9 @@ You can find the settings for this plugin at the "Gazetteer" tab of the base con
 * **Target field**
     * The field where the plugin writes the generated custom data
     * must be of type *Gazetteer*
+* **Update Gazetteer entries also when changing objects**
+    * By default, objects with Gazetteer entries are only updated by the plugin when they are inserted
+    * enable this checkbox if the Gazetteer entries should be updated after any update of the object
 
 #### Example
 
