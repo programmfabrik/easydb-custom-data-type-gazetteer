@@ -73,6 +73,9 @@ server.config.group.system.gazetteer_plugin.introduction,Einstellungen für Cust
 custom.data.type.gazetteer.config.objecttype.label,Objekttyp,Object type,Object type,Object type
 custom.data.type.gazetteer.config.field_from.label,Quellfeld,Source field,Source field,Source field
 custom.data.type.gazetteer.config.field_to.label,Zielfeld (vom Typ Gazetteer),Target field of type Gazetteer,Target field of type Gazetteer,Target field of type Gazetteer
+server.config.parameter.system.gazetteer_plugin_settings.on_update.checkbox,Gazetteereinträge auch beim Ändern von Objekten aktualisieren,,,
+server.config.parameter.system.gazetteer_plugin_settings.on_update.label|hint,"Gazetteereinträge in Objekten werden standardmäßig nur beim Anlegen eines Objekts aktualisiert. Aktivieren Sie diese Option, damit die Einträge bei jeder Änderung des Objekts aktualisiert werden.",,,
+server.config.parameter.system.gazetteer_plugin_settings.on_update.label,-,-,-,-
 custom.data.type.gazeteer.update.error.generic,"Fehler beim Suchen nach Gazetteer-Objekten.
 
 Query: %(searchQuery)s.

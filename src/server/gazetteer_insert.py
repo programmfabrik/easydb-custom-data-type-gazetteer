@@ -8,7 +8,7 @@ import traceback
 from datetime import datetime, date
 from context import EasydbException, EasydbError, ServerError, UserError, get_json_value
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../easydb-library/src/python')
-from noderunner import call as noderunner_call
+import noderunner
 
 
 def get_string_from_baseconfig(db_cursor, class_str, key_str, parameter_str):
@@ -44,6 +44,10 @@ def get_from_baseconfig(db_cursor, value_column, class_str, key_str, parameter_s
         return unicode(_result[value_column])
     except:
         return None
+
+
+def quote_value(value):
+    return value.replace('\'', '\'\'')
 
 
 def easydb_server_start(easydb_context):
@@ -158,14 +162,14 @@ class GazetteerUpdate(object):
                 self.logger.debug('data[%s][%s] not found -> skip' % (i, self.objecttype))
                 continue
 
-            if on_update:
+            if not on_update:
                 if not '_version' in data[i][self.objecttype]:
                     self.logger.debug('on_update is enabled, but could not find _version in data[%s] -> skip' % i)
                     continue
 
-                if data[i]['_version'][self.objecttype] != 1:
+                if data[i][self.objecttype]['_version'] != 1:
                     self.logger.debug('on_update is enabled, but _version of data[%s] = %s -> no insert -> skip'
-                        % (i, data[i]['_version']))
+                        % (i, data[i][self.objecttype]['_version']))
                     continue
 
             _pool_id = None
@@ -320,7 +324,7 @@ class GazetteerUpdate(object):
             _values.append(str(owner_id))
 
             _cols.append('"%s"' % self.field_to)
-            _values.append('\'%s\'' % json.dumps(gazetteer_data, indent=4))
+            _values.append('\'%s\'' % quote_value(json.dumps(gazetteer_data, indent=4)))
 
             self.db_cursor.execute("""
                 INSERT INTO %s (%s)
@@ -376,7 +380,7 @@ class GazetteerUpdate(object):
             ]
         }
 
-        out, err, exit_code = noderunner_call(self.config, self.script, [json.dumps(_payload)])
+        out, err, exit_code = noderunner.call(self.config, self.script, [json.dumps(_payload)])
 
         if exit_code != 0:
             self.logger.warn(
