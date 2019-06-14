@@ -265,7 +265,7 @@ class GazetteerUpdate(object):
                 return _response.getcode(), _data['result']
 
             else:
-                return _response.getcode(), str(_data[:128])
+                return _response.getcode(), str(_data)
 
         except Exception as e:
             self.logger.warn('could not get response for query \'%s\': %s' % (_query, str(e)))
@@ -340,28 +340,6 @@ class GazetteerUpdate(object):
         except Exception as e:
             self.logger.warn("Could not create Gazetteer objects: %s" % str(e))
             return None
-
-    def insert_object_job(self, object_id):
-        try:
-            self.db_cursor.execute("""
-                INSERT INTO ez_object_job (
-                    type,
-                    operation,
-                    "ez_objecttype:id",
-                    ez_object_id,
-                    priority,
-                    insert_time)
-                VALUES (
-                    'preindex',
-                    'INSERT'::op_row,
-                    %s,
-                    %s,
-                    -100,
-                    NOW())
-            """ % (self.objecttype_id, object_id))
-            return True
-        except:
-            return False
 
     def format_custom_data(self, gazetteer_data):
 
