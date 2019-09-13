@@ -44,7 +44,7 @@ class ez5.GazetteerUtil
 	@getSaveDataObject: (data) ->
 		fulltext = data.displayName
 		if data.otherNames?.length > 0
-			fulltext = data.otherNames.map((otherName) -> otherName.title).concat(fulltext)
+			fulltext = data.otherNames.map((otherName) -> otherName.title).concat(fulltext).join(' ')
 
 		object =
 			displayName: data.displayName
