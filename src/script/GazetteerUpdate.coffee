@@ -1,8 +1,15 @@
 class GazetteerUpdate
 
-	__startup: ({server_config, plugin_config}) ->
+	__start_update: ({server_config, plugin_config}) ->
 		# TODO: do some checks, maybe check if the library server is reachable
-		ez5.respondSuccess({payload: "OK"})
+		ez5.respondSuccess({
+			# NOTE:
+			# 'state' object can contain any data the update script might need between updates.
+			# the easydb server will save this and send it with any 'update' request
+			state: {
+				"start_update": new Date().toUTCString()
+			}
+		})
 
 	__updateData: ({objects, plugin_config}) ->
 		objectsMap = {}
@@ -65,8 +72,8 @@ class GazetteerUpdate
 				ez5.respondError("custom.data.type.gazeteer.update.error.payload-key-missing", {key: key})
 				return
 
-		if (data.action == "startup")
-			@__startup(data)
+		if (data.action == "start_update")
+			@__start_update(data)
 			return
 
 		else if (data.action == "update")
@@ -76,6 +83,22 @@ class GazetteerUpdate
 
 			if (!(data.objects instanceof Array))
 				ez5.respondError("custom.data.type.gazeteer.update.error.objects-not-array")
+				return
+
+			# NOTE: state for all batches
+			# this contains any arbitrary data the update script might need between batches
+			# it should be sent to the server during 'start_update' and is included in each batch
+			if (!data.state)
+				ez5.respondError("custom.data.type.gazeteer.update.error.state-missing")
+				return
+
+			# NOTE: information for this batch
+			# this contains information about the current batch, espacially:
+			#   - offset: start offset of this batch in the list of all collected values for this custom type
+			#   - total: total number of all collected custom values for this custom type
+			# it is included in each batch
+			if (!data.batch_info)
+				ez5.respondError("custom.data.type.gazeteer.update.error.batch_info-missing")
 				return
 
 			# TODO: check validity of config, plugin (timeout), objects...
