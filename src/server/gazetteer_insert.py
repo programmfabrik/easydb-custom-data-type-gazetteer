@@ -239,7 +239,7 @@ class GazetteerUpdate(object):
                     k -= 1
 
 
-            easydb_context.update_user_objects(self.objecttype, list(_objects_to_index))
+            easydb_context.update_user_objects(self.objecttype, list(_objects_to_index), True) # pass parameter to invalidate the object cache explicitly
 
             data[i][self.objecttype]['_id_parent'] = _parent_id
 
@@ -347,6 +347,11 @@ class GazetteerUpdate(object):
             'action': 'update',
             'server_config': {},
             'plugin_config': {},
+            'state': {},
+            'batch_info': {
+                'offset': 0,
+                'total': len(gazetteer_data)
+            },
             'objects': [
                 {
                     'identifier': gazetteer_data[i]['id'],
@@ -358,7 +363,7 @@ class GazetteerUpdate(object):
             ]
         }
 
-        out, err, exit_code = noderunner.call(self.config, self.script, [json.dumps(_payload)])
+        out, err, exit_code = noderunner.call(self.config, self.script, json.dumps(_payload))
 
         if exit_code != 0:
             self.logger.warn(
