@@ -190,6 +190,10 @@ class GazetteerUpdate(object):
                     self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                         % (i, self.objecttype, self.field_from, self.field_to))
                     continue
+            if _gazetteer_id is None or len(str(_gazetteer_id)) < 1:
+                self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
+                    % (i, self.objecttype, self.field_from, self.field_to))
+                continue
 
             _response = self.load_gazetteer(easydb_context, _gazetteer_id)
             if _response is None:
@@ -232,14 +236,16 @@ class GazetteerUpdate(object):
                     if _object_id is None:
                         # object does not exist yet, create new object
                         _object_id = self.create_gazetteer_object(_formatted_data[k], _owner_id, _parent_id, _pool_id)
-                        self.logger.debug('inserted new object %s:%s (parent: %s)' % (self.objecttype, _object_id, _parent_id))
-                        _objects_to_index.add(_object_id)
-                    _parent_id = _object_id
-                    self.logger.debug('parent id: %s' % _parent_id)
+                        if _object_id is not None:
+                            self.logger.debug('inserted new object %s:%s (parent: %s)' % (self.objecttype, _object_id, _parent_id))
+                            _objects_to_index.add(_object_id)
+
+                        _parent_id = _object_id
+                        self.logger.debug('parent id: %s' % _parent_id)
                     k -= 1
 
-
-            easydb_context.update_user_objects(self.objecttype, list(_objects_to_index), True) # pass parameter to invalidate the object cache explicitly
+            if len(_objects_to_index) > 0:
+                easydb_context.update_user_objects(self.objecttype, list(_objects_to_index), True) # pass parameter to invalidate the object cache explicitly
 
             data[i][self.objecttype]['_id_parent'] = _parent_id
 
@@ -334,12 +340,11 @@ class GazetteerUpdate(object):
 
             _result = self.db_cursor.fetchone()
             if not 'id:pkey' in _result:
-                return None
+                raise GazetteerError('insert_error', 'could not find object id in result of INSERT')
 
             return int(_result['id:pkey'])
         except Exception as e:
-            self.logger.warn("Could not create Gazetteer objects: %s" % str(e))
-            return None
+            raise GazetteerError('database_error', str(e))
 
     def format_custom_data(self, gazetteer_data):
 
