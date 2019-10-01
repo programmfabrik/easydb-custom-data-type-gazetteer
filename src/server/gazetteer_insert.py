@@ -6,7 +6,7 @@ import urllib2
 import sys
 import traceback
 from datetime import datetime, date
-from context import EasydbException, EasydbError, ServerError, UserError, get_json_value
+from context import EasydbException, EasydbError, APIError, get_json_value
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../easydb-library/src/python')
 import noderunner
 
@@ -64,10 +64,10 @@ def pre_update(easydb_context, easydb_info):
     return GazetteerUpdate().update(easydb_context, easydb_info)
 
 
-class GazetteerError(ServerError):
+class GazetteerError(APIError):
 
     def __init__(self, type_str, description=None):
-        super(GazetteerError, self).__init__('gazetteer_insert.' + type_str, description, None)
+        super(GazetteerError, self).__init__('gazetteer_insert.' + type_str, description)
 
 
 class GazetteerUpdate(object):
