@@ -25,8 +25,10 @@ class ez5.GazetteerUtil
 
 	# Set the necessary attributes from gazetteer *data* to *object*
 	@setObjectData: (object, data) ->
+		if CUI.util.isEmpty(data)
+			return object
 		delete object.notFound
-		object.displayName = data.prefName.title
+		object.displayName = data.prefName?.title
 		object.gazId = data.gazId
 		object.otherNames = data.names
 		object.types = data.types or []
