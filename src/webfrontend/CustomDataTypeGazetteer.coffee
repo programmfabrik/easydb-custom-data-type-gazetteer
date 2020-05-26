@@ -263,6 +263,10 @@ class CustomDataTypeGazetteer extends CustomDataType
 									type: "editor-changed"
 
 								return
+
+				CUI.Events.trigger
+					type: "content-resize"
+					node: autocompletionPopup
 			)
 
 		if CUI.util.isEmpty(formData) or formData.notFound or not formData.gazId
