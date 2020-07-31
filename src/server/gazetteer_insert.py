@@ -182,22 +182,22 @@ class GazetteerUpdate(object):
 
             _gazetteer_id = get_json_value(data[i], '%s.%s'
                 % (self.objecttype, self.field_from)) if self.field_from is not None else None
-            self.logger.debug('data.%s.%s.%s: \'%s\'' % (i, self.objecttype, self.field_from, str(_gazetteer_id)))
+            self.logger.debug(u'data.%s.%s.%s: \'%s\'' % (i, self.objecttype, self.field_from, _gazetteer_id))
             if _gazetteer_id is None:
                 _gazetteer_id = get_json_value(data[i], '%s.%s.gazId' % (self.objecttype, self.field_to))
-                self.logger.debug('data.%s.%s.%s.gazId: \'%s\'' % (i, self.objecttype, self.field_to, str(_gazetteer_id)))
+                self.logger.debug('data.%s.%s.%s.gazId: \'%s\'' % (i, self.objecttype, self.field_to, _gazetteer_id))
                 if _gazetteer_id is None:
-                    self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
+                    self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                         % (i, self.objecttype, self.field_from, self.field_to))
                     continue
-            if _gazetteer_id is None or len(str(_gazetteer_id)) < 1:
-                self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
+            if _gazetteer_id is None or len(unicode(_gazetteer_id)) < 1:
+                self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                     % (i, self.objecttype, self.field_from, self.field_to))
                 continue
 
             _response = self.load_gazetteer(easydb_context, _gazetteer_id)
             if _response is None:
-                self.logger.warn('did not get a response from server for gazetteer id \'%s\'' % _gazetteer_id)
+                self.logger.warn(u'did not get a response from server for gazetteer id \'%s\'' % _gazetteer_id)
                 return data
 
             _objects = []
@@ -207,7 +207,7 @@ class GazetteerUpdate(object):
                     'gazId': str(_response['gazId'])
                 }]
             else:
-                self.logger.warn('could not find \'gazId\' in response for query for gazetteer id %s' % _gazetteer_id)
+                self.logger.warn(u'could not find \'gazId\' in response for query for gazetteer id %s' % _gazetteer_id)
                 return data
 
             if 'parents' in _response:
@@ -258,11 +258,14 @@ class GazetteerUpdate(object):
 
     def search_by_query(self, gazetteer_ids):
         try:
-            _query = " OR ".join(gazetteer_ids)
+            _query = u" OR ".join(gazetteer_ids)
 
-            _url = '%s?q=%s%s' % (
-                self.query_url, urllib2.quote(_query), self.query_suffix)
-            self.logger.debug('load gazetteer data from %s' % _url)
+            # XXX urllib2.quote() is not unicode compliant, https://bugs.python.org/msg88367
+            _query_enc = urllib2.quote(_query.encode('utf-8'))
+
+            _url = u'%s?q=%s%s' % (
+                self.query_url, _query_enc, self.query_suffix)
+            self.logger.debug(u'load gazetteer data from %s' % _url)
 
             _response = urllib2.urlopen(_url)
             _data = json.loads(_response.read())
