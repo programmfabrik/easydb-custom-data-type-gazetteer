@@ -249,7 +249,6 @@ class GazetteerUpdate(object):
 
             data[i][self.objecttype]['_id_parent'] = _parent_id
 
-            data[i]['_mask'] = '_all_fields'
             data[i][self.objecttype][self.field_to] = _formatted_data[0]
             self.logger.debug('data.%s.%s.%s updated with custom data from gazetteer repository'
                 % (i, self.objecttype, self.field_to))
