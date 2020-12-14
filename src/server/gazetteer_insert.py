@@ -148,6 +148,7 @@ class GazetteerUpdate(object):
 
         on_update = get_bool_from_baseconfig(self.db_cursor, 'system', 'gazetteer_plugin_settings', 'on_update')
 
+        objects = []
         for i in range(len(data)):
 
             if not '_objecttype' in data[i]:
@@ -227,10 +228,22 @@ class GazetteerUpdate(object):
 
             _parent_id = None
             if len(_formatted_data) > 1:
+                # do not export objects that exist
+                _object_id, _ = self.exists_gazetteer_object(_formatted_data[0])
+                if _object_id is not None:
+                    self.logger.info('object %s:%s already exists' %
+                                      (self.objecttype, _object_id))
+                    self.logger.debug('object %s:%s already exists: %s' %
+                                      (self.objecttype, _object_id, json.dumps(_formatted_data[0], indent=4)))
+                    continue
+
                 self.logger.debug('gazetteer object has %d parents' % (len(_formatted_data) - 1))
                 k = len(_formatted_data) - 1
                 while k >= 1:
                     _object_id, _owner_id = self.exists_gazetteer_object(_formatted_data[k])
+                    self.logger.debug('gazetteer object #%d: id %s (owner %s) | %s'
+                        % (k, str(_object_id), str(_owner_id), json.dumps(_formatted_data[k], indent=4)))
+
                     if _owner_id is None:
                         _owner_id = 1  # assume root user
                     if _object_id is None:
@@ -240,20 +253,24 @@ class GazetteerUpdate(object):
                             self.logger.debug('inserted new object %s:%s (parent: %s)' % (self.objecttype, _object_id, _parent_id))
                             _objects_to_index.add(_object_id)
 
-                        _parent_id = _object_id
-                        self.logger.debug('parent id: %s' % _parent_id)
+                    # set parent id for the new object
+                    _parent_id = _object_id
+                    self.logger.debug('parent for new object: %s' % _parent_id)
+
                     k -= 1
 
             if len(_objects_to_index) > 0:
                 easydb_context.update_user_objects(self.objecttype, list(_objects_to_index), True) # pass parameter to invalidate the object cache explicitly
 
-            data[i][self.objecttype]['_id_parent'] = _parent_id
-
-            data[i][self.objecttype][self.field_to] = _formatted_data[0]
+            obj = data[i]
+            obj[self.objecttype]['_id_parent'] = _parent_id
+            obj[self.objecttype][self.field_to] = _formatted_data[0]
             self.logger.debug('data.%s.%s.%s updated with custom data from gazetteer repository'
                 % (i, self.objecttype, self.field_to))
 
-        return data
+            objects.append(obj)
+
+        return objects
 
     def search_by_query(self, gazetteer_ids):
         try:
@@ -301,18 +318,22 @@ class GazetteerUpdate(object):
         _gazetteer_id = gazetteer_data['gazId']
 
         try:
-            self.db_cursor.execute("""
+            statement = """
                 SELECT "id:pkey", ":owner:ez_user:id"
                 FROM %s
                 WHERE %s::json ->> 'gazId' = '%s'
-            """ % (self.objecttype, self.field_to, _gazetteer_id))
+            """ % (self.objecttype, self.field_to, _gazetteer_id)
+            self.logger.debug('[exists_gazetteer_object] SQL: %s' % statement)
+            self.db_cursor.execute(statement)
 
             _result = self.db_cursor.fetchall()
+            self.logger.debug('[exists_gazetteer_object] Result: %s' % json.dumps(_result, indent=4))
             if len(_result) < 1:
                 return None, None
 
             return int(_result[0]['id:pkey']), int(_result[0][':owner:ez_user:id'])
-        except:
+        except Exception as e:
+            self.logger.warn('[exists_gazetteer_object] could not find exisiting objects in database: %s' % e.message)
             return None, None
 
     def create_gazetteer_object(self, gazetteer_data, owner_id, parent_id=None, pool_id=None):
