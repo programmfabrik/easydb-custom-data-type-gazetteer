@@ -153,24 +153,29 @@ class GazetteerUpdate(object):
 
             if not '_objecttype' in data[i]:
                 self.logger.debug('could not find _objecttype in data[%s] -> skip' % i)
+                objects.append(data[i])
                 continue
 
             if data[i]['_objecttype'] != self.objecttype:
                 self.logger.debug('data[%s]["_objecttype"] != %s -> skip' % (i, self.objecttype))
+                objects.append(data[i])
                 continue
 
             if not self.objecttype in data[i]:
                 self.logger.debug('data[%s][%s] not found -> skip' % (i, self.objecttype))
+                objects.append(data[i])
                 continue
 
             if not on_update:
                 if not '_version' in data[i][self.objecttype]:
                     self.logger.debug('on_update is enabled, but could not find _version in data[%s] -> skip' % i)
+                    objects.append(data[i])
                     continue
 
                 if data[i][self.objecttype]['_version'] != 1:
                     self.logger.debug('on_update is enabled, but _version of data[%s] = %s -> no insert -> skip'
                         % (i, data[i][self.objecttype]['_version']))
+                    objects.append(data[i])
                     continue
 
             _pool_id = None
@@ -178,6 +183,7 @@ class GazetteerUpdate(object):
                 _pool_id = get_json_value(data[i], '%s._pool.pool._id' % self.objecttype)
                 if _pool_id is None:
                     self.logger.debug('could not find _pool.pool._id in data[%s] -> skip' % i)
+                    objects.append(data[i])
                     continue
                 self.logger.debug('pool id: %s' % _pool_id)
 
@@ -190,10 +196,12 @@ class GazetteerUpdate(object):
                 if _gazetteer_id is None:
                     self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                         % (i, self.objecttype, self.field_from, self.field_to))
+                    objects.append(data[i])
                     continue
             if _gazetteer_id is None or len(unicode(_gazetteer_id)) < 1:
                 self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                     % (i, self.objecttype, self.field_from, self.field_to))
+                objects.append(data[i])
                 continue
 
             _response = self.load_gazetteer(easydb_context, _gazetteer_id)
