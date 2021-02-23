@@ -4,9 +4,7 @@ import os
 import json
 import urllib2
 import sys
-import traceback
-from datetime import datetime, date
-from context import EasydbException, EasydbError, APIError, get_json_value
+from context import APIError, get_json_value
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../easydb-library/src/python')
 import noderunner
 
@@ -31,7 +29,7 @@ def get_from_baseconfig(db_cursor, value_column, class_str, key_str, parameter_s
             AND key = '%s'
             AND parameter = '%s'
         """ % ('%s%s' % (value_column, '::int' if value_column == 'value_bool' else ''),
-                class_str, key_str, parameter_str))
+               class_str, key_str, parameter_str))
 
         _result = db_cursor.fetchone()
 
@@ -41,7 +39,7 @@ def get_from_baseconfig(db_cursor, value_column, class_str, key_str, parameter_s
         if _result[value_column] is None:
             return None
 
-        return unicode(_result[value_column])
+        return str(_result[value_column])
     except:
         return None
 
@@ -174,7 +172,7 @@ class GazetteerUpdate(object):
 
                 if data[i][self.objecttype]['_version'] != 1:
                     self.logger.debug('on_update is enabled, but _version of data[%s] = %s -> no insert -> skip'
-                        % (i, data[i][self.objecttype]['_version']))
+                                      % (i, data[i][self.objecttype]['_version']))
                     objects.append(data[i])
                     continue
 
@@ -188,19 +186,19 @@ class GazetteerUpdate(object):
                 self.logger.debug('pool id: %s' % _pool_id)
 
             _gazetteer_id = get_json_value(data[i], '%s.%s'
-                % (self.objecttype, self.field_from)) if self.field_from is not None else None
+                                           % (self.objecttype, self.field_from)) if self.field_from is not None else None
             self.logger.debug(u'data.%s.%s.%s: \'%s\'' % (i, self.objecttype, self.field_from, _gazetteer_id))
             if _gazetteer_id is None:
                 _gazetteer_id = get_json_value(data[i], '%s.%s.gazId' % (self.objecttype, self.field_to))
                 self.logger.debug('data.%s.%s.%s.gazId: \'%s\'' % (i, self.objecttype, self.field_to, _gazetteer_id))
                 if _gazetteer_id is None:
                     self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
-                        % (i, self.objecttype, self.field_from, self.field_to))
+                                      % (i, self.objecttype, self.field_from, self.field_to))
                     objects.append(data[i])
                     continue
-            if _gazetteer_id is None or len(unicode(_gazetteer_id)) < 1:
+            if _gazetteer_id is None or len(str(_gazetteer_id)) < 1:
                 self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
-                    % (i, self.objecttype, self.field_from, self.field_to))
+                                  % (i, self.objecttype, self.field_from, self.field_to))
                 objects.append(data[i])
                 continue
 
@@ -237,20 +235,19 @@ class GazetteerUpdate(object):
             _parent_id = None
             if len(_formatted_data) > 1:
                 # do not export objects that exist
-                _object_id, _ = self.exists_gazetteer_object(_formatted_data[0])
+                _object_id, _, _gazetteer_id = self.exists_gazetteer_object(_formatted_data[0])
                 if _object_id is not None:
-                    self.logger.info('object %s:%s already exists' %
-                                      (self.objecttype, _object_id))
                     self.logger.debug('object %s:%s already exists: %s' %
                                       (self.objecttype, _object_id, json.dumps(_formatted_data[0], indent=4)))
-                    continue
+                    raise GazetteerError('object.duplicate', 'Gazetteer ID %s already exists in object %s (objecttype: %s)' %
+                                         (_gazetteer_id, _object_id, self.objecttype))
 
                 self.logger.debug('gazetteer object has %d parents' % (len(_formatted_data) - 1))
                 k = len(_formatted_data) - 1
                 while k >= 1:
                     _object_id, _owner_id = self.exists_gazetteer_object(_formatted_data[k])
                     self.logger.debug('gazetteer object #%d: id %s (owner %s) | %s'
-                        % (k, str(_object_id), str(_owner_id), json.dumps(_formatted_data[k], indent=4)))
+                                      % (k, str(_object_id), str(_owner_id), json.dumps(_formatted_data[k], indent=4)))
 
                     if _owner_id is None:
                         _owner_id = 1  # assume root user
@@ -274,16 +271,15 @@ class GazetteerUpdate(object):
             obj[self.objecttype]['_id_parent'] = _parent_id
             obj[self.objecttype][self.field_to] = _formatted_data[0]
             self.logger.debug('data.%s.%s.%s updated with custom data from gazetteer repository'
-                % (i, self.objecttype, self.field_to))
+                              % (i, self.objecttype, self.field_to))
 
             objects.append(obj)
 
         return objects
 
     def search_by_query(self, gazetteer_ids):
+        _query = u" OR ".join(gazetteer_ids)
         try:
-            _query = u" OR ".join(gazetteer_ids)
-
             # XXX urllib2.quote() is not unicode compliant, https://bugs.python.org/msg88367
             _query_enc = urllib2.quote(_query.encode('utf-8'))
 
@@ -305,7 +301,7 @@ class GazetteerUpdate(object):
             return 500, str(e)
 
     def load_gazetteer(self, easydb_context, gazetteer_id):
-        _gaz_id = unicode(gazetteer_id)
+        _gaz_id = str(gazetteer_id)
 
         _statuscode, _response = self.search_by_query([_gaz_id])
         if _statuscode != 200:
@@ -322,7 +318,7 @@ class GazetteerUpdate(object):
     def exists_gazetteer_object(self, gazetteer_data):
 
         if not 'gazId' in gazetteer_data:
-            return None, None
+            return None, None, None
         _gazetteer_id = gazetteer_data['gazId']
 
         try:
@@ -337,12 +333,12 @@ class GazetteerUpdate(object):
             _result = self.db_cursor.fetchall()
             self.logger.debug('[exists_gazetteer_object] Result: %s' % json.dumps(_result, indent=4))
             if len(_result) < 1:
-                return None, None
+                return None, None, _gazetteer_id
 
-            return int(_result[0]['id:pkey']), int(_result[0][':owner:ez_user:id'])
+            return int(_result[0]['id:pkey']), int(_result[0][':owner:ez_user:id']), _gazetteer_id
         except Exception as e:
             self.logger.warn('[exists_gazetteer_object] could not find exisiting objects in database: %s' % e.message)
-            return None, None
+            return None, None, _gazetteer_id
 
     def create_gazetteer_object(self, gazetteer_data, owner_id, parent_id=None, pool_id=None):
         try:
