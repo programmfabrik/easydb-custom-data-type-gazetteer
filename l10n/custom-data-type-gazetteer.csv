@@ -141,3 +141,4 @@ Select a target field in the Gazetteer settings in the base configuration.","Gaz
 
 No target field for generated Gazetteer data selected.
 Select a target field in the Gazetteer settings in the base configuration."
+error.api.gazetteer_insert.object.duplicate,Gazetteer Plugin: Der Gazetteereintrag existiert bereits und kann nicht eingefügt werden.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.
