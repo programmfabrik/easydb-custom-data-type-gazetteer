@@ -245,7 +245,7 @@ class GazetteerUpdate(object):
                 self.logger.debug('gazetteer object has %d parents' % (len(_formatted_data) - 1))
                 k = len(_formatted_data) - 1
                 while k >= 1:
-                    _object_id, _owner_id = self.exists_gazetteer_object(_formatted_data[k])
+                    _object_id, _owner_id, _gazetteer_id = self.exists_gazetteer_object(_formatted_data[k])
                     self.logger.debug('gazetteer object #%d: id %s (owner %s) | %s'
                                       % (k, str(_object_id), str(_owner_id), json.dumps(_formatted_data[k], indent=4)))
 
