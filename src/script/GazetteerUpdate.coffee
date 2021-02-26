@@ -57,7 +57,7 @@ class GazetteerUpdate
 		)
 
 	__hasChanges: (objectOne, objectTwo) ->
-		for key in ["displayName", "gazId", "otherNames", "types", "position", "iconName"]
+		for key in ["displayName", "gazId", "otherNames", "types", "position", "iconName", "_fulltext"]
 			if not CUI.util.isEqual(objectOne[key], objectTwo[key])
 				return true
 		return false
