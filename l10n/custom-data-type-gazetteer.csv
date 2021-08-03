@@ -142,3 +142,8 @@ Select a target field in the Gazetteer settings in the base configuration.","Gaz
 No target field for generated Gazetteer data selected.
 Select a target field in the Gazetteer settings in the base configuration."
 error.api.gazetteer_insert.object.duplicate,Gazetteer Plugin: Der Gazetteereintrag existiert bereits und kann nicht eingefügt werden.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.
+server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.checkbox,Enabled,Enabled,,
+server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.checkbox,Enabled,Enabled,,
+server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.label,Alternative Namen anzeigen,Show alternative names,,
+server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.label,Breitengrad und Längengrad anzeigen,Show latitude and longitude,,
+custom.data.type.gazetteer.types.latitude_longitude.text,Lat: %(lat)s - Lng: %(lng)s,Lat: %(lat)s - Lng: %(lng)s,,

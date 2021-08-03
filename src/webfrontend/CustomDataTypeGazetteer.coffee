@@ -377,6 +377,13 @@ class CustomDataTypeGazetteer extends CustomDataType
 				types.push $$("custom.data.type.gazetteer.types.#{type}.text")
 			content.push new CUI.Label(text: types.join(", "), appearance: "secondary")
 
+		if not CUI.util.isEmpty(data.otherNames) and ez5.session.config.base.system.gazetteer_plugin_settings?.show_alternative_names
+			otherNames = data.otherNames.map((otherName) -> otherName.title).join(', ')
+			content.push(new CUI.Label(text: otherNames, appearance: "secondary"))
+
+		if not CUI.util.isEmpty(data.position) and ez5.session.config.base.system.gazetteer_plugin_settings?.show_lat_lng
+			content.push(new CUI.Label(text: $$("custom.data.type.gazetteer.types.latitude_longitude.text", data.position), appearance: "secondary"))
+
 		list = new CUI.VerticalList(content: content)
 
 		if small
