@@ -18,7 +18,7 @@ INSTALL_FILES = \
 	src/server/gazetteer_insert.py \
 	$(CSS) \
 	$(JS) \
-	CustomDataTypeGazetteer.config.yml
+	manifest.yml
 
 COFFEE_FILES = src/webfrontend/CustomDataTypeGazetteer.coffee \
 	src/webfrontend/CustomBaseConfigGazetteer.coffee \
