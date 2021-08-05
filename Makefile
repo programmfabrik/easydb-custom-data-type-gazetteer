@@ -1,4 +1,5 @@
 PLUGIN_NAME = custom-data-type-gazetteer
+PLUGIN_PATH = easydb-custom-data-type-gazetteer
 
 EASYDB_LIB = easydb-library
 
