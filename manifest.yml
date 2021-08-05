@@ -45,15 +45,15 @@ base_config:
   - name: gazetteer_plugin_settings
     group: gazetteer_plugin
     parameters:
-      enabled:
+      show_alternative_names:
         type: bool
         position: 0
         default: false
-      show_alternative_names:
+      show_lat_lng:
         type: bool
         position: 1
         default: false
-      show_lat_lng:
+      enabled:
         type: bool
         position: 2
         default: false
