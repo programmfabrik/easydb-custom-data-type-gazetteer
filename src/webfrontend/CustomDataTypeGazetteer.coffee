@@ -378,8 +378,49 @@ class CustomDataTypeGazetteer extends CustomDataType
 			content.push new CUI.Label(text: types.join(", "), appearance: "secondary")
 
 		if not CUI.util.isEmpty(data.otherNames) and ez5.session.config.base.system.gazetteer_plugin_settings?.show_alternative_names
-			otherNames = data.otherNames.map((otherName) -> otherName.title).join(', ')
-			content.push(new CUI.Label(text: otherNames, appearance: "secondary"))
+			otherNameLabels = []
+			showingMore = false
+			showMoreLessButton = new CUI.Button
+				text: ""
+				appearance: "link"
+				size: "mini"
+				onClick: =>
+					if showingMore
+						showLess()
+					else
+						showMore()
+					showingMore = not showingMore
+			CUI.dom.hideElement(showMoreLessButton)
+
+			showLess = () ->
+				for label in otherNameLabels
+					CUI.dom.hideElement(label)
+
+				for level in [0..3] by 1
+					if not otherNameLabels[level]
+						continue
+					CUI.dom.showElement(otherNameLabels[level])
+
+				if otherNameLabels.length > 4
+					showMoreLessButton.setText($$("custom.data.type.gazetteer.types.card.show-more-button"))
+					CUI.dom.showElement(showMoreLessButton)
+				return
+
+			showMore = () ->
+				for label in otherNameLabels
+					CUI.dom.showElement(label)
+				showMoreLessButton.setText($$("custom.data.type.gazetteer.types.card.show-less-button"))
+				return
+
+			otherNames = data.otherNames.map((otherName) -> otherName.title)
+			for otherName in otherNames
+				otherNameLabels.push(new CUI.Label(text: otherName, appearance: "secondary"))
+
+			showLess()
+
+			verticalListContent = if small then otherNameLabels else otherNameLabels.concat([showMoreLessButton])
+			verticalList = new CUI.VerticalList(content: verticalListContent)
+			content.push(verticalList)
 
 		if not CUI.util.isEmpty(data.position) and ez5.session.config.base.system.gazetteer_plugin_settings?.show_lat_lng
 			content.push(new CUI.Label(text: $$("custom.data.type.gazetteer.types.latitude_longitude.text", data.position), appearance: "secondary"))

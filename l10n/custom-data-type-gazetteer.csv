@@ -147,3 +147,5 @@ server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.checkbox,E
 server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.label,Alternative Namen anzeigen,Show alternative names,,
 server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.label,Breitengrad und Längengrad anzeigen,Show latitude and longitude,,
 custom.data.type.gazetteer.types.latitude_longitude.text,Lat: %(lat)s - Lng: %(lng)s,Lat: %(lat)s - Lng: %(lng)s,,
+custom.data.type.gazetteer.types.card.show-less-button,Weniger anzeigen,Show less,,
+custom.data.type.gazetteer.types.card.show-more-button,Mehr anzeigen,Show more,,
