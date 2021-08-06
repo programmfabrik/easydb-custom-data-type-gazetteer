@@ -2,7 +2,7 @@
 
 import os
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import sys
 from context import APIError, get_json_value
 sys.path.append(os.path.abspath(os.path.dirname(__file__)) + '/../../easydb-library/src/python')
@@ -14,7 +14,7 @@ def get_string_from_baseconfig(db_cursor, class_str, key_str, parameter_str):
 
 
 def get_bool_from_baseconfig(db_cursor, class_str, key_str, parameter_str):
-    return get_from_baseconfig(db_cursor, 'value_bool', class_str, key_str, parameter_str) == u'1'
+    return get_from_baseconfig(db_cursor, 'value_bool', class_str, key_str, parameter_str) == '1'
 
 
 def get_from_baseconfig(db_cursor, value_column, class_str, key_str, parameter_str):
@@ -187,24 +187,24 @@ class GazetteerUpdate(object):
 
             _gazetteer_id = get_json_value(data[i], '%s.%s'
                                            % (self.objecttype, self.field_from)) if self.field_from is not None else None
-            self.logger.debug(u'data.%s.%s.%s: \'%s\'' % (i, self.objecttype, self.field_from, _gazetteer_id))
+            self.logger.debug('data.%s.%s.%s: \'%s\'' % (i, self.objecttype, self.field_from, _gazetteer_id))
             if _gazetteer_id is None:
                 _gazetteer_id = get_json_value(data[i], '%s.%s.gazId' % (self.objecttype, self.field_to))
                 self.logger.debug('data.%s.%s.%s.gazId: \'%s\'' % (i, self.objecttype, self.field_to, _gazetteer_id))
                 if _gazetteer_id is None:
-                    self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
+                    self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                                       % (i, self.objecttype, self.field_from, self.field_to))
                     objects.append(data[i])
                     continue
             if _gazetteer_id is None or len(str(_gazetteer_id)) < 1:
-                self.logger.debug(u'data.%s.%s.[%s / %s.gazId] not found or null -> skip'
+                self.logger.debug('data.%s.%s.[%s / %s.gazId] not found or null -> skip'
                                   % (i, self.objecttype, self.field_from, self.field_to))
                 objects.append(data[i])
                 continue
 
             _response = self.load_gazetteer(easydb_context, _gazetteer_id)
             if _response is None:
-                self.logger.warn(u'did not get a response from server for gazetteer id \'%s\'' % _gazetteer_id)
+                self.logger.warn('did not get a response from server for gazetteer id \'%s\'' % _gazetteer_id)
                 return data
 
             _objects = []
@@ -214,7 +214,7 @@ class GazetteerUpdate(object):
                     'gazId': str(_response['gazId'])
                 }]
             else:
-                self.logger.warn(u'could not find \'gazId\' in response for query for gazetteer id %s' % _gazetteer_id)
+                self.logger.warn('could not find \'gazId\' in response for query for gazetteer id %s' % _gazetteer_id)
                 return data
 
             if 'parents' in _response:
@@ -278,16 +278,16 @@ class GazetteerUpdate(object):
         return objects
 
     def search_by_query(self, gazetteer_ids):
-        _query = u" OR ".join(gazetteer_ids)
+        _query = " OR ".join(gazetteer_ids)
         try:
             # XXX urllib2.quote() is not unicode compliant, https://bugs.python.org/msg88367
-            _query_enc = urllib2.quote(_query.encode('utf-8'))
+            _query_enc = urllib.parse.quote(_query.encode('utf-8'))
 
-            _url = u'%s?q=%s%s' % (
+            _url = '%s?q=%s%s' % (
                 self.query_url, _query_enc, self.query_suffix)
-            self.logger.debug(u'load gazetteer data from %s' % _url)
+            self.logger.debug('load gazetteer data from %s' % _url)
 
-            _response = urllib2.urlopen(_url)
+            _response = urllib.request.urlopen(_url)
             _data = json.loads(_response.read())
 
             if 'result' in _data and isinstance(_data['result'], list):
