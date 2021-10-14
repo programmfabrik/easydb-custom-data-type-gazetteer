@@ -416,7 +416,7 @@ class GazetteerUpdate(object):
             if len(payload) < 1:
                 raise Exception('\'body.payload\' in node_runner response is empty')
 
-            payload.sort(cmp=self.sort_by_identifier)
+            payload.sort(key = lambda a: a['identifier'])
 
             return [p['data'] for p in payload if 'data' in p]
 
@@ -424,7 +424,3 @@ class GazetteerUpdate(object):
             self.logger.warn(
                 'could not format gazetteer data from node_runner response: %s' % str(e))
             return []
-
-
-    def sort_by_identifier(self, a, b):
-        return a['identifier'] - b['identifier']
