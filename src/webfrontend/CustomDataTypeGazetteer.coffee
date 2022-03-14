@@ -45,6 +45,15 @@ class CustomDataTypeGazetteer extends CustomDataType
 
 		return content
 
+	renderTableOutput: (data, _, opts) ->
+		initData = @__initData(data)
+
+		content = @__renderOutput(
+			data: initData
+			onlyText: true
+		)
+		return content
+
 	renderDetailOutput: (data, _, opts) ->
 		initData = @__initData(data)
 
@@ -312,13 +321,23 @@ class CustomDataTypeGazetteer extends CustomDataType
 			small:
 				check: Boolean
 				default: false
+			onlyText:
+				check: Boolean
+				default: false
 			onDelete:
 				check: Function
 			onModify:
 				check: Function
 		)
 
-		{data, editor, small, onDelete, onModify} = opts
+		{data, editor, small, onDelete, onModify, onlyText} = opts
+
+		content = [
+			new CUI.Label(text: data.displayName, appearance: "title", multiline: true)
+		]
+
+		if onlyText
+			return content[0]
 
 		link = ez5.GazetteerUtil.PLACE_URL + data.gazId
 
@@ -366,10 +385,6 @@ class CustomDataTypeGazetteer extends CustomDataType
 				appearance: "flat"
 				menu:
 					items: menuItems
-
-		content = [
-			new CUI.Label(text: data.displayName, appearance: "title", multiline: true)
-		]
 
 		if data.types
 			types = []
