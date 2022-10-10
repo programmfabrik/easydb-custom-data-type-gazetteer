@@ -25,7 +25,7 @@ custom_types:
     update:
       script: build/scripts/gazetteer-update.js
       timeout: 10
-      batch_size: 1000
+      batch_size: 100
       interval_base_config: update_interval_gazetteer.days
     mapping:
       gazId:
