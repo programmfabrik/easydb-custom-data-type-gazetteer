@@ -90,18 +90,22 @@ class CustomDataTypeGazetteer extends CustomDataType
 	renderFieldAsGroup: ->
 		return false
 
+	getTemplateData: (data) ->
+		return data?._template?[@name()]
+
 	getSaveData: (data, save_data) ->
-		data = data[@name()]
-		if CUI.util.isEmpty(data)
+		fieldData = data[@name()]
+
+		if CUI.util.isEmpty(fieldData) or CUI.util.isEmpty(fieldData.gazId)
+			templateData = @getTemplateData(data)
+			if not CUI.util.isEmpty(templateData)
+				return save_data[@name()] = templateData
 			return save_data[@name()] = null
 
-		if CUI.util.isEmpty(data.gazId)
-			return save_data[@name()] = null
-
-		if data.notFound
+		if fieldData.notFound
 			return throw new InvalidSaveDataException()
 
-		return save_data[@name()] = ez5.GazetteerUtil.getSaveDataObject(data)
+		return save_data[@name()] = ez5.GazetteerUtil.getSaveDataObject(fieldData)
 
 	getQueryFieldBadge: (data) =>
 		if data["#{@name()}:unset"]
