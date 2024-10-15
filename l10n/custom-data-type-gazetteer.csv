@@ -1,38 +1,152 @@
-key,de-DE,en-US,it-IT,es-ES
-custom.data.type.gazetteer.name,Gazetteer,Gazetteer,Gazetteer,Gazetteer
-custom.data.type.gazetteer.search.label,Suche,Search,Search,Search
-custom.data.type.gazetteer.search.placeholder,Suche nach einem Ort mit Name oder ID,Search a place by name or ID,Search a place by name or ID,Search a place by name or ID
-custom.data.type.gazetteer.search.no-results|text,Keine Ergebnisse gefunden,No results found,No results found,No results found
-custom.data.type.gazetteer.search.result.md,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s,%(gazId)s - %(prefName.title)s
-custom.data.type.gazetteer.preview.label,Vorschau,Preview,Preview,Preview
-custom.data.type.gazetteer.preview.empty-label,Keine Vorschau verfügbar,No preview available.,No preview available.,No preview available.
-custom.data.type.gazetteer.detail-map-button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
-custom.data.type.gazetteer.detail-map-button|tooltip,In Karte anzeigen,View in map,View in map,View in map
-custom.data.type.gazetteer.preview.id-not-found,ID existiert nicht,ID doesn't exist,ID doesn't exist,ID doesn't exist
-custom.data.type.gazetteer.preview.button|icon,fa-map-o,fa-map-o,fa-map-o,fa-map-o
-custom.data.type.gazetteer.preview.button|text,In Karte anzeigen,View in map,View in map,View in map
-custom.data.type.gazetteer.link.button|icon,fa-external-link,fa-external-link,fa-external-link,fa-external-link
-custom.data.type.gazetteer.link.button|text,Externen Link öffnen,Open link,Open link,Open link
-custom.data.type.gazetteer.delete.button|icon,fa-trash,fa-trash,fa-trash,fa-trash
-custom.data.type.gazetteer.delete.button|text,Löschen,Delete,Delete,Delete
-custom.data.type.gazetteer.modify.button|icon,fa-edit,fa-edit,fa-edit,fa-edit
-custom.data.type.gazetteer.modify.button|text,Ändern,Modify,Modify,Modify
-custom.data.type.gazetteer.types.populated-place.text,Bewohnter Ort,Populated place,Populated place,Populated place
-custom.data.type.gazetteer.types.administrative-unit.text,Verwaltungseinheit,Administrative unit,Administrative unit,Administrative unit
-custom.data.type.gazetteer.types.archaeological-site.text,Archäologischer Ort,Archaeological Site,Archaeological Site,Archaeological Site
-custom.data.type.gazetteer.types.archaeological-area.text,Archäologischer Bereich,Archaeological Area,Archaeological Area,Archaeological Area
-custom.data.type.gazetteer.types.continent.text,Kontinent,Continent,Continent,Continent
-custom.data.type.gazetteer.types.building-institution.text,Standort/Institution,Building institution,Building institution,Building institution
-custom.data.type.gazetteer.types.landform.text,Landform,Landform,Landform,Landform
-custom.data.type.gazetteer.types.hydrography.text,Hydrographie,Hydrography,Hydrography,Hydrography
-custom.data.type.gazetteer.name.caster.name,Feld mit Gazetteer ID,Field with ID to Gazetteer,Field with ID to Gazetteer,Field with ID to Gazetteer
-custom.data.type.gazetteer.name.caster.description,Gazetteer information mit valider ID suchen,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID,Searches the Gazetteer information with a valid ID
-custom.data.type.gazetteer.config.field-from-empty-text,Gazetteer ID aus Zielfeld verwenden,Same as target field,Same as target field,El mismo que el campo de destino.
-server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin,Automatic updates for the Gazetteer Custom Data Type Plugin
-server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,Update every x days,Update every x days,Update every x days
-server.config.name.system.update_interval_gazetteer,Gazetteer Update Einstellungen,Gazetteer Update settings,Gazetteer Update settings,Gazetteer Update settings
-server.config.parameter.system.update_interval_gazetteer.days.label,Tage zwischen Updates,Days between updates,Days between updates,Days between updates
-server.config.name.system.gazetteer_plugin_settings,Automatisches Einfügen von Objekten mit Gazetteer-Feldern,Automatic inserts of objects with Gazetteer fields,Automatic inserts of objects with Gazetteer fields,Automatic inserts of objects with Gazetteer fields
+key,de-DE,R,en-US,R,da-DK,R,fi-FI,R,sv-SE,R,fr-FR,R,it-IT,R,es-ES,R
+custom.data.type.gazeteer.update.error.generic,"Fehler beim Suchen nach Gazetteer-Objekten.
+
+Query: %(searchQuery)s.
+
+Fehler: %(error)s",FALSE,"Error in search of Gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s",FALSE,"Error in search of Gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s",FALSE,"Virhe haettaessa paikkatieto-objekteja.
+
+Kysely: %(searchQuery)s.
+
+Virhe: %(error)s",FALSE,Fel vid sökning av gazetteer-objekt.\n\nSökning: %(searchQuery)s.\n\nFel: %(error)s,FALSE,"Erreur dans la recherche des objets Gazetteer.
+
+Requête: %(searchQuery)s.
+
+Erreur: %(error)s",FALSE,"Error in search of Gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s",FALSE,"Error in search of Gazetteer objects.
+
+Query: %(searchQuery)s.
+
+Error: %(error)s",FALSE
+custom.data.type.gazeteer.update.error.invalid-action,'action' ungültig: %(action)s,FALSE,Invalid action: %(action)s,FALSE,Invalid action: %(action)s,FALSE,Virheellinen toiminto: %(action)s,FALSE,Ogiltig åtgärd: %(action)s,FALSE,Action invalide : %(action)s,FALSE,Invalid action: %(action)s,FALSE,Invalid action: %(action)s,FALSE
+custom.data.type.gazeteer.update.error.objects-missing,Für Update: Wert 'objects' fehlt,FALSE,For update: key 'objects' missing,FALSE,For update: key 'objects' missing,FALSE,päivitystä varten: avain 'objektit' puuttuu,FALSE,för uppdatering: nyckel 'objekt' saknas,FALSE,Pour mise à jour : 'objects' clés manquants,FALSE,For update: key 'objects' missing,FALSE,For update: key 'objects' missing,FALSE
+custom.data.type.gazeteer.update.error.objects-not-array,Für Update: Wert 'objects' muss vom Typ 'array' sein,FALSE,For update: invalid key 'objects': must be an array,FALSE,For update: invalid key 'objects': must be an array,FALSE,päivitystä varten: virheellinen avain 'objektit': täytyy olla tyyppiä array,FALSE,för uppdatering: ogiltig nyckel 'objekt': måste vara av typen array,FALSE,Pour la mise à jour : clé  'objects' non valide : doit être un tableau,FALSE,For update: invalid key 'objects': must be an array,FALSE,For update: invalid key 'objects': must be an array,FALSE
+custom.data.type.gazeteer.update.error.payload-key-missing,%(key)s fehlt in der Payload,FALSE,Missing %(key)s in payload,FALSE,Missing %(key)s in payload,FALSE,Datapaketista puuttuu %(key)s,FALSE,Saknar %(key)s i nyttolasten,FALSE,%(key)s manquant pour le Payload,FALSE,Missing %(key)s in payload,FALSE,Missing %(key)s in payload,FALSE
+custom.data.type.gazeteer.update.error.payload-missing,Payload fehlt,FALSE,Payload is missing,FALSE,Payload is missing,FALSE,Datapaketti puuttuu,FALSE,Nyttolast saknas,FALSE,Payload est manquante,FALSE,Payload is missing,FALSE,Payload is missing,FALSE
+custom.data.type.gazetteer.config.field_from.label,Quellfeld,FALSE,Source field,FALSE,Source field,FALSE,Lähdekenttä,FALSE,Källfält,FALSE,Champ source,FALSE,Source field,FALSE,Source field,FALSE
+custom.data.type.gazetteer.config.field_to.label,Zielfeld (vom Typ Gazetteer),FALSE,Target field of type Gazetteer,FALSE,Target field of type Gazetteer,FALSE,Kohdekenttä tyyppiä paikkatieto,FALSE,Målfält av typen Gazetteer,FALSE,Champ cible de type Répertoire géographique (Gazetteer),FALSE,Target field of type Gazetteer,FALSE,Target field of type Gazetteer,FALSE
+custom.data.type.gazetteer.config.field-from-empty-text,Gazetteer ID aus Zielfeld verwenden,FALSE,Same as target field,FALSE,Same as target field,FALSE,Sama kuin kohdekenttä,FALSE,Samma som målfält,FALSE,Identique au champ cible,FALSE,Same as target field,FALSE,El mismo que el campo de destino.,FALSE
+custom.data.type.gazetteer.config.objecttype.label,Objekttyp,FALSE,Object type,FALSE,Object type,FALSE,Objektityyppi,FALSE,Objekttyp,FALSE,Type d'objet,FALSE,Object type,FALSE,Object type,FALSE
+custom.data.type.gazetteer.delete.button|icon,fa-trash,FALSE,fa-trash,FALSE,fa-trash,FALSE,fa-trash,FALSE,fa-trash,FALSE,fa-trash,FALSE,fa-trash,FALSE,fa-trash,FALSE
+custom.data.type.gazetteer.delete.button|text,Löschen,FALSE,Delete,FALSE,Delete,FALSE,Poista,FALSE,Radera,FALSE,Supprimer,FALSE,Delete,FALSE,Delete,FALSE
+custom.data.type.gazetteer.detail-map-button|icon,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE
+custom.data.type.gazetteer.detail-map-button|tooltip,In Karte anzeigen,FALSE,View on map,FALSE,View on map,FALSE,Näytä kartalla,FALSE,Visa på karta,FALSE,Voir sur la carte,FALSE,View in map,FALSE,View in map,FALSE
+custom.data.type.gazetteer.link.button|icon,fa-external-link,FALSE,fa-external-link,FALSE,fa-external-link,FALSE,fa-external-link,FALSE,fa-external-link,FALSE,fa-external-link,FALSE,fa-external-link,FALSE,fa-external-link,FALSE
+custom.data.type.gazetteer.link.button|text,Externen Link öffnen,FALSE,Open link,FALSE,Open link,FALSE,Avaa linkki,FALSE,Öppna länk,FALSE,Ouvrir le lien,FALSE,Open link,FALSE,Open link,FALSE
+custom.data.type.gazetteer.modify.button|icon,fa-edit,FALSE,fa-edit,FALSE,fa-edit,FALSE,fa-edit,FALSE,fa-edit,FALSE,fa-edit,FALSE,fa-edit,FALSE,fa-edit,FALSE
+custom.data.type.gazetteer.modify.button|text,Ändern,FALSE,Modify,FALSE,Modify,FALSE,Muokkaa,FALSE,Redigera,FALSE,Modifier,FALSE,Modify,FALSE,Modify,FALSE
+custom.data.type.gazetteer.name,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE
+custom.data.type.gazetteer.name.caster.description,Gazetteer information mit valider ID suchen,FALSE,Searches the Gazetteer information with a valid ID,FALSE,Searches the Gazetteer information with a valid ID,FALSE,Hakee paikkatiedot voimassaolevalla tunnuksella,FALSE,Söker i Gazetteer-informationen med ett giltigt ID,FALSE,Recherche les informations du répertoire géographique avec un identifiant valide,FALSE,Searches the Gazetteer information with a valid ID,FALSE,Searches the Gazetteer information with a valid ID,FALSE
+custom.data.type.gazetteer.name.caster.name,Feld mit Gazetteer ID,FALSE,Field with Gazetteer ID,FALSE,Field with Gazetteer ID,FALSE,"Kenttä, jossa on tunnus Gazetteeriin",FALSE,Fält med ID till Gazetteer,FALSE,Champ avec ID de répertoire géographique (Gazetteer),FALSE,Field with Gazetteer ID,FALSE,Field with Gazetteer ID,FALSE
+custom.data.type.gazetteer.preview.button|icon,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE,fa-map-o,FALSE
+custom.data.type.gazetteer.preview.button|text,In Karte anzeigen,FALSE,View on map,FALSE,View on map,FALSE,Näytä kartalla,FALSE,Visa på karta,FALSE,Voir sur la carte,FALSE,View in map,FALSE,View in map,FALSE
+custom.data.type.gazetteer.preview.empty-label,Keine Vorschau verfügbar,FALSE,No preview available.,FALSE,No preview available.,FALSE,Esikatselu ei ole saatavilla.,FALSE,Ingen förhandsvisning tillgänglig.,FALSE,Aucun aperçu disponible.,FALSE,No preview available.,FALSE,No preview available.,FALSE
+custom.data.type.gazetteer.preview.id-not-found,ID existiert nicht,FALSE,ID doesn't exist,FALSE,ID doesn't exist,FALSE,Tunnusta ei ole,FALSE,ID finns inte,FALSE,L'ID n'existe pas,FALSE,ID doesn't exist,FALSE,ID doesn't exist,FALSE
+custom.data.type.gazetteer.preview.label,Vorschau,FALSE,Preview,FALSE,Preview,FALSE,Esikatselu,FALSE,Förhandsvisning,FALSE,Aperçu,FALSE,Preview,FALSE,Preview,FALSE
+custom.data.type.gazetteer.search.label,Suche,FALSE,Search,FALSE,Search,FALSE,Haku,FALSE,Sök,FALSE,Recherche,FALSE,Search,FALSE,Search,FALSE
+custom.data.type.gazetteer.search.no-results|text,Keine Ergebnisse gefunden,FALSE,No results found,FALSE,No results found,FALSE,Tuloksia ei löytynyt,FALSE,Inga resultat funna,FALSE,Aucun résultat trouvé,FALSE,No results found,FALSE,No results found,FALSE
+custom.data.type.gazetteer.search.placeholder,Suche nach einem Ort mit Name oder ID,FALSE,Search a place by name or ID,FALSE,Search a place by name or ID,FALSE,Hae paikkaa nimellä tai tunnuksella,FALSE,Sök efter en plats med namn eller ID,FALSE,Rechercher un lieu par nom ou identifiant,FALSE,Search a place by name or ID,FALSE,Search a place by name or ID,FALSE
+custom.data.type.gazetteer.search.result.md,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE,%(gazId)s - %(prefName.title)s,FALSE
+custom.data.type.gazetteer.types.administrative-unit.text,Verwaltungseinheit,FALSE,Administrative unit,FALSE,Administrative unit,FALSE,Hallintoyksikkö,FALSE,Administrativ enhet,FALSE,Unité administrative,FALSE,Administrative unit,FALSE,Administrative unit,FALSE
+custom.data.type.gazetteer.types.archaeological-area.text,Archäologischer Bereich,FALSE,Archaeological Area,FALSE,Archaeological Area,FALSE,Arkeologinen alue,FALSE,Arkeologiskt område,FALSE,Zone archéologique,FALSE,Archaeological Area,FALSE,Archaeological Area,FALSE
+custom.data.type.gazetteer.types.archaeological-site.text,Archäologischer Ort,FALSE,Archaeological Site,FALSE,Archaeological Site,FALSE,Arkeologinen kohde,FALSE,Arkeologisk utgrävning,FALSE,Site archéologique,FALSE,Archaeological Site,FALSE,Archaeological Site,FALSE
+custom.data.type.gazetteer.types.building-institution.text,Standort/Institution,FALSE,Building institution,FALSE,Building institution,FALSE,Rakennusinstituutio,FALSE,Byggande institution,FALSE,Bâtiment institutionnel,FALSE,Building institution,FALSE,Building institution,FALSE
+custom.data.type.gazetteer.types.card.show-less-button,Weniger anzeigen,FALSE,Show less,FALSE,Show less,FALSE,Näytä vähemmän,FALSE,Visa mindre,FALSE,Montrer moins,FALSE,,FALSE,,FALSE
+custom.data.type.gazetteer.types.card.show-more-button,Mehr anzeigen,FALSE,Show more,FALSE,Show more,FALSE,Näytä enemmän,FALSE,Visa mera,FALSE,Montrer plus,FALSE,,FALSE,,FALSE
+custom.data.type.gazetteer.types.continent.text,Kontinent,FALSE,Continent,FALSE,Continent,FALSE,Maanosa,FALSE,Kontinent,FALSE,Continent,FALSE,Continent,FALSE,Continent,FALSE
+custom.data.type.gazetteer.types.hydrography.text,Hydrographie,FALSE,Hydrography,FALSE,Hydrography,FALSE,Hydrografia,FALSE,Sjömätning,FALSE,Hydrographie,FALSE,Hydrography,FALSE,Hydrography,FALSE
+custom.data.type.gazetteer.types.landform.text,Landform,FALSE,Landform,FALSE,Landform,FALSE,Maanmuoto,FALSE,Landform,FALSE,Relief,FALSE,Landform,FALSE,Landform,FALSE
+custom.data.type.gazetteer.types.latitude_longitude.text,Lat: %(lat)s - Lng: %(lng)s,FALSE,Lat: %(lat)s - Lng: %(lng)s,FALSE,Lat: %(lat)s - Lng: %(lng)s,FALSE,Lat: %(lat)s - Long: %(lng)s,FALSE,Lat: %(lat)s - Lng: %(lng)s,FALSE,Lat : %(lat)s - Long : %(lng)s,FALSE,,FALSE,,FALSE
+custom.data.type.gazetteer.types.populated-place.text,Bewohnter Ort,FALSE,Populated place,FALSE,Populated place,FALSE,Asutettu paikka,FALSE,Befolkad plats,FALSE,Lieu peuplé,FALSE,Populated place,FALSE,Populated place,FALSE
+error.api.gazetteer_insert.object.duplicate,Gazetteer Plugin: Der Gazetteereintrag existiert bereits und kann nicht eingefügt werden.,FALSE,Gazetteer Plugin: The Gazetteer record already exists and can not be inserted.,FALSE,Gazetteer Plugin: The Gazetteer record already exists and can not be inserted.,FALSE,"Paikkatiedot-laajennus: Paikkatiedot-merkintä on jo olemassa, eikä sitä voi lisätä.",FALSE,Gazetteer-plugin: Gazetteer-posten finns redan och kan inte infogas.,FALSE,Plugin Gazetteer : L'enregistrement Gazetteer existe déjà et ne peut pas être inséré.,FALSE,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,FALSE,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,FALSE
+error.server.gazetteer_insert.field_to.not_set,"Gazetteer Plugin:
+
+Es wurde kein Zielfeld für generierte Gazetteer-Daten ausgewählt.
+Wählen Sie ein Zielfeld in den Gazetteer-Einstellungen der Basiskonfiguration aus.",FALSE,"Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration.",FALSE,"Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration.",FALSE,"Paikkatiedot-laajennus:
+
+Kohdekenttää luoduille paikkatiedoille ei ole valittu.
+Valitse kohdekenttä peruskokoonpanon paikkatietoasetuksista.",FALSE,Gazetteer-plugin:\n\nInget målfält för genererad Gazetteer-data har valts.\nVälj ett målfält i Gazetteer-inställningarna i baskonfigurationen.,FALSE,"Gazetteer Plugin:
+
+Aucun champ cible pour les données de répertoire géographique générées n'est sélectionné.
+Sélectionnez un champ cible dans les paramètres du répertoire géographique dans la configuration de base.",FALSE,"Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration.",FALSE,"Gazetteer Plugin:
+
+No target field for generated Gazetteer data selected.
+Select a target field in the Gazetteer settings in the base configuration.",FALSE
+error.server.gazetteer_insert.objecttype.not_hierarchical,"Gazetteer Plugin:
+
+Der gewählte Objekttyp kann nicht für den automatischen Update von Gazetteer-Objekten verwendet werden.
+Es können nur hierarchische Objekttypen automatisch aktualisiert werden.
+Wählen Sie einen anderen Objekttyp in den Gazetteer-Einstellungen der Basiskonfiguration aus.",FALSE,"Gazetteer Plugin:
+
+The selected object type can not be used for the automatic update of Gazetteer records.
+Only hierarchical object types can be used for automatic Gazetteer updates.
+Select another object type in the Gazetteer settings in the base configuration.",FALSE,"Gazetteer Plugin:
+
+The selected object type can not be used for the automatic update of Gazetteer records.
+Only hierarchical object types can be used for automatic Gazetteer updates.
+Select another object type in the Gazetteer settings in the base configuration.",FALSE,"Paikkatiedot-laajennus:
+
+Valittua objektityyppiä ei voi käyttää Gazetteer-objektien automaattiseen päivittämiseen.
+Vain hierarkkisia objektityyppejä voidaan käyttää automaattisissa paikkatietopäivityksissä.
+Valitse toinen objektityyppi paikkatietoasetuksista peruskokoonpanossa.",FALSE,Gazetteer-plugin:\n\nDen valda objekttypen kan inte användas för automatisk uppdatering av Gazetteer-objekt.\nEndast hierarkiska objekttyper kan användas för automatiska Gazetteer-uppdateringar.\nVälj en annan objekttyp i Gazetteer-inställningarna i baskonfigurationen.,FALSE,"Gazetteer Plugin:
+
+Le type d'objet sélectionné ne peut pas être utilisé pour la mise à jour automatique des enregistrements du répertoire géographique.
+Seuls les types d'objets hiérarchiques peuvent être utilisés pour les mises à jour automatiques du répertoire géographique.
+Sélectionnez un autre type d'objet dans les paramètres du répertoire géographique dans la configuration de base.",FALSE,"Gazetteer Plugin:
+
+The selected object type can not be used for the automatic update of Gazetteer records.
+Only hierarchical object types can be used for automatic Gazetteer updates.
+Select another object type in the Gazetteer settings in the base configuration.",FALSE,"Gazetteer Plugin:
+
+The selected object type can not be used for the automatic update of Gazetteer records.
+Only hierarchical object types can be used for automatic Gazetteer updates.
+Select another object type in the Gazetteer settings in the base configuration.",FALSE
+error.server.gazetteer_insert.objecttype.not_set,"Gazetteer Plugin:
+
+Es wurde kein Objekttyp für generierte Gazetteer-Daten ausgewählt.
+Wählen Sie einen hierarchischen Objekttyp in den Gazetteer-Einstellungen der Basiskonfiguration aus.",FALSE,"Gazetteer Plugin:
+
+No object type for generated Gazetteer data selected.
+Select an object type in the Gazetteer settings in the base configuration.",FALSE,"Gazetteer Plugin:
+
+No object type for generated Gazetteer data selected.
+Select an object type in the Gazetteer settings in the base configuration.",FALSE,"Paikkatiedot-laajennus:
+
+Ei ole valittu kohdetyyppiä luoduille Gazetteer-tiedoille.
+Valitse kohdetyyppi peruskonfiguraation paikkatietoasetuksista.",FALSE,Gazetteer-plugin:\n\nIngen objekttyp för genererad Gazetteer-data har valts.\nVälj en objekttyp i Gazetteer-inställningarna i baskonfigurationen.,FALSE,"Gazetteer Plugin:
+
+Aucun type d'objet sélectionné pour les données de répertoire géographique générées.
+Sélectionnez un type d'objet dans les paramètres du répertoire géographique dans la configuration de base.",FALSE,"Gazetteer Plugin:
+
+No object type for generated Gazetteer data selected.
+Select an object type in the Gazetteer settings in the base configuration.",FALSE,"Gazetteer Plugin:
+
+No object type for generated Gazetteer data selected.
+Select an object type in the Gazetteer settings in the base configuration.",FALSE
+server.config.group.system.gazetteer_plugin.introduction,Einstellungen für Custom Data Type Gazetteer,FALSE,Settings for custom data type Gazetteer,FALSE,Settings for custom data type Gazetteer,FALSE,Mukautetun paikkatietotyypin asetukset,FALSE,Inställningar för anpassad datatyp Gazetteer,FALSE,Paramètres pour le type de données personnalisé Répertoire géographique,FALSE,Settings for custom data type Gazetteer,FALSE,Settings for custom data type Gazetteer,FALSE
+server.config.group.system.gazetteer_plugin.title,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Paikkatiedot,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE
+server.config.group.system.plugin_custom-data-type-gazetteer.introduction,Einstellungen für das Gazetteer-Plugin,FALSE,Settings for the Gazetteer plugin,FALSE,Settings for the Gazetteer plugin,FALSE,Paikkatiedot-laajennuksen asetukset,FALSE,Inställningar för Gazetteer plugin,FALSE,Paramètres du plugin Gazetteer,FALSE,Settings for the Gazetteer plugin,FALSE,Settings for the Gazetteer plugin,FALSE
+server.config.group.system.plugin_custom-data-type-gazetteer.title,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Paikkatiedot,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE,Gazetteer,FALSE
+server.config.name.system.gazetteer_plugin_settings,Automatisches Einfügen von Objekten mit Gazetteer-Feldern,FALSE,Automatic insertion of records with Gazetteer fields,FALSE,Automatic insertion of records with Gazetteer fields,FALSE,Automaattiset objektien lisäykset paikkatietokentillä,FALSE,Automatiska insättningar av objekt med Gazetteer-fält,FALSE,Insertion automatique des enregistrements avec les champs Répertoire géographique,FALSE,Automatic insertion of records with Gazetteer fields,FALSE,Automatic insertion of records with Gazetteer fields,FALSE
 server.config.name.system.gazetteer_plugin_settings|hint,"Wählen Sie einen hierarchischen Objekttypen sowie Ziel- und Quellfelder, um Gazetteer-Custom-Datatype-Felder zu aktualisieren, und fehlende Elternobjekte automatisch zu erzeugen.
 
 Bitte beachten Sie folgende Einschränkungen:
@@ -41,111 +155,65 @@ Bitte beachten Sie folgende Einschränkungen:
 * Der Objekttyp muss hierarchisch sein, um die hierarchische Gazetteer-Struktur abbilden zu können
 * Es können keine Objekttypen gewählt werden, die Felder mit NOT-NULL- oder Check-Constraints besitzen (abgesehen von Feldern in Mehrfachfeldern, oder dem Zielfeld), da das Plugin die Constraints nicht erfüllen kann
 
-Weitere Informationen: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+Weitere Informationen: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Select a hierarchical object type and target & source fields to update Gazetteer custom datatype fields, and automatically create missing parent records.
 
 Please note the following restrictions:
 
-* Only object types can be selected that have at least one Gazetteer type field outside of a nested table
-* The object type must be hierarchical to map the hierarchical Gazetteer structure
-* No object types can be selected that have fields with NOT-NULL or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
+* Only object types that have at least one Gazetteer field (outside of nested fields) can be selected.
+* The object type must be hierarchical to be able to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with NOT-NULL or check constraints (except for fields in nested fields, or the target field), because the plugin cannot satisfy the constraints.
 
-More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
-
-Please note the following restrictions:
-
-* Only object types can be selected that have at least one Gazetteer type field outside of a nested table
-* The object type must be hierarchical to map the hierarchical Gazetteer structure
-* No object types can be selected that have fields with NOT-NULL or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
-
-More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer","Select a hierarchic object type as well as source and target fields to automatically Gazetteer fields. Missing parent objects are automatically inserted as well.
+More information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Select a hierarchical object type and target & source fields to update Gazetteer custom datatype fields, and automatically create missing parent records.
 
 Please note the following restrictions:
 
-* Only object types can be selected that have at least one Gazetteer type field outside of a nested table
-* The object type must be hierarchical to map the hierarchical Gazetteer structure
-* No object types can be selected that have fields with NOT-NULL or check constraints (apart from the target field and fields inside nested tables), as the plugin cannot fulfill the constraints
+* Only object types that have at least one Gazetteer field (outside of nested fields) can be selected.
+* The object type must be hierarchical to be able to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with NOT-NULL or check constraints (except for fields in nested fields, or the target field), because the plugin cannot satisfy the constraints.
 
-More Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer"
-server.config.parameter.system.gazetteer_plugin_settings.enabled.checkbox,Aktiviert,Enabled,Enabled,Enabled
-server.config.parameter.system.gazetteer_plugin_settings.enabled.label,-,-,-,-
-server.config.group.system.gazetteer_plugin.title,Gazetteer,Gazetteer,Gazetteer,Gazetteer
-server.config.group.system.gazetteer_plugin.introduction,Einstellungen für Custom Data Type Gazetteer,Settings for custom data type Gazetteer,Settings for custom data type Gazetteer,Settings for custom data type Gazetteer
-custom.data.type.gazetteer.config.objecttype.label,Objekttyp,Object type,Object type,Object type
-custom.data.type.gazetteer.config.field_from.label,Quellfeld,Source field,Source field,Source field
-custom.data.type.gazetteer.config.field_to.label,Zielfeld (vom Typ Gazetteer),Target field of type Gazetteer,Target field of type Gazetteer,Target field of type Gazetteer
-server.config.parameter.system.gazetteer_plugin_settings.on_update.checkbox,Gazetteereinträge auch beim Ändern von Objekten aktualisieren,Update Gazetteer entries also when changing objects,Update Gazetteer entries also when changing objects,Update Gazetteer entries also when changing objects
-server.config.parameter.system.gazetteer_plugin_settings.on_update.label|hint,"Gazetteereinträge in Objekten werden standardmäßig nur beim Anlegen eines Objekts aktualisiert. Aktivieren Sie diese Option, damit die Einträge bei jeder Änderung des Objekts aktualisiert werden.","By default, Gazetteer entries in objects are only updated when an object is created. Activate this option so that the entries are updated each time the object is changed.","By default, Gazetteer entries in objects are only updated when an object is created. Activate this option so that the entries are updated each time the object is changed.","By default, Gazetteer entries in objects are only updated when an object is created. Activate this option so that the entries are updated each time the object is changed."
-server.config.parameter.system.gazetteer_plugin_settings.on_update.label,-,-,-,-
-custom.data.type.gazeteer.update.error.generic,"Fehler beim Suchen nach Gazetteer-Objekten.
+More information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Valitse hierarkkinen objektityyppi sekä lähde- ja kohdekentät automaattisesti paikkatietokentille. Myös puuttuvat pääobjektit lisätään automaattisesti.
 
-Query: %(searchQuery)s.
+Huomaa seuraavat rajoitukset:
 
-Fehler: %(error)s","Error in search of gazetteer objects.
+* Voidaan valita vain objektityyppejä, joissa on vähintään yksi paikkatyyppikenttä sisäkkäisen taulukon ulkopuolella
+* Objektityypin on oltava hierarkkinen jotta voidaan kartoittaa hierarkkinen paikkatietorakenne
+* Objektityyppejä, joissa on kenttiä NOT-NULL tai tarkistusrajoituksia ei voi valita (lukuun ottamatta kohdekenttää ja sisäkkäisten taulukoiden sisällä olevia kenttiä), koska laajennus ei voi täyttää rajoituksia
 
-Query: %(searchQuery)s.
+Lisätietoja: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Välj en hierarkisk objekttyp samt käll- och målfält för att automatiskt skapa Gazetteer-fält. Saknade överordnade objekt infogas också automatiskt.\n\nObservera följande begränsningar:\n\n* Endast objekttyper kan väljas som har minst ett Gazetteer-typfält utanför en kapslad tabell\n* Objekttypen måste vara hierarkisk för att kartlägga den hierarkiska Gazetteer-strukturen\n* Inga objekttyper kan väljas som har fält med NOT-NULL eller kontrollbegränsningar (förutom målfältet och fält inuti kapslade tabeller), eftersom pluginet inte kan uppfylla begränsningarna\n\nMer Information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Sélectionnez un type d'objet hiérarchique et des champs cible et source pour mettre à jour les champs de type de données personnalisés de Gazetteer et créer automatiquement les enregistrements parents manquants.
 
-Error: %(error)s","Error in search of gazetteer objects.
+Veuillez noter les restrictions suivantes :
 
-Query: %(searchQuery)s.
+* Seuls les types d'objets comportant au moins un champ Répertoire géographique (en dehors des champs imbriqués) peuvent être sélectionnés.
+* Le type d'objet doit être hiérarchique pour pouvoir cartographier la structure hiérarchique du répertoire géographique
+* Aucun type d'objet ne peut être sélectionné avec des champs avec des contraintes NOT-NULL ou des contraintes de vérification (à l'exception des champs dans les champs imbriqués ou du champ cible), car le plugin ne peut pas satisfaire les contraintes.
 
-Error: %(error)s","Error in search of gazetteer objects.
+Pour plus d'information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Select a hierarchical object type and target & source fields to update Gazetteer custom datatype fields, and automatically create missing parent records.
 
-Query: %(searchQuery)s.
+Please note the following restrictions:
 
-Error: %(error)s"
-custom.data.type.gazeteer.update.error.payload-missing,Payload fehlt,Payload is missing,Payload is missing,Payload is missing
-custom.data.type.gazeteer.update.error.objects-missing,Für Update: Wert 'objects' fehlt,for update: key 'objects' missing,for update: key 'objects' missing,for update: key 'objects' missing
-custom.data.type.gazeteer.update.error.objects-not-array,Für Update: Wert 'objects' muss vom Typ 'array' sein,for update: invalid key 'objects': must be array,for update: invalid key 'objects': must be array,for update: invalid key 'objects': must be array
-custom.data.type.gazeteer.update.error.invalid-action,'action' ungültig: %(action)s,Invalid action: %(action)s,Invalid action: %(action)s,Invalid action: %(action)s
-custom.data.type.gazeteer.update.error.payload-key-missing,%(key)s fehlt in der Payload,Missing %(key)s in payload,Missing %(key)s in payload,Missing %(key)s in payload
-error.server.gazetteer_insert.objecttype.not_hierarchical,"Gazetteer Plugin:
+* Only object types that have at least one Gazetteer field (outside of nested fields) can be selected.
+* The object type must be hierarchical to be able to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with NOT-NULL or check constraints (except for fields in nested fields, or the target field), because the plugin cannot satisfy the constraints.
 
-Der gewählte Objekttyp kann nicht für den automatischen Update von Gazetteer-Objekten verwendet werden.
-Es können nur hierarchische Objekttypen automatisch aktualisiert werden.
-Wählen Sie einen anderen Objekttyp in den Gazetteer-Einstellungen der Basiskonfiguration aus.","Gazetteer Plugin:
+More information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE,"Select a hierarchical object type and target & source fields to update Gazetteer custom datatype fields, and automatically create missing parent records.
 
-The selected objecttype can not be used for the automatic update of Gazetteer objects.
-Only hierarchical objecttypes can be used for automatic Gazetteer updates.
-Select another objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+Please note the following restrictions:
 
-The selected objecttype can not be used for the automatic update of Gazetteer objects.
-Only hierarchical objecttypes can be used for automatic Gazetteer updates.
-Select another objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
+* Only object types that have at least one Gazetteer field (outside of nested fields) can be selected.
+* The object type must be hierarchical to be able to map the hierarchical Gazetteer structure
+* No object types can be selected that have fields with NOT-NULL or check constraints (except for fields in nested fields, or the target field), because the plugin cannot satisfy the constraints.
 
-The selected objecttype can not be used for the automatic update of Gazetteer objects.
-Only hierarchical objecttypes can be used for automatic Gazetteer updates.
-Select another objecttype in the Gazetteer settings in the base configuration."
-error.server.gazetteer_insert.objecttype.not_set,"Gazetteer Plugin:
-
-Es wurde kein Objekttyp für generierte Gazetteer-Daten ausgewählt.
-Wählen Sie einen hierarchischen Objekttyp in den Gazetteer-Einstellungen der Basiskonfiguration aus.","Gazetteer Plugin:
-
-No objecttype for generated Gazetteer data selected.
-Select an objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
-
-No objecttype for generated Gazetteer data selected.
-Select an objecttype in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
-
-No objecttype for generated Gazetteer data selected.
-Select an objecttype in the Gazetteer settings in the base configuration."
-error.server.gazetteer_insert.field_to.not_set,"Gazetteer Plugin:
-
-Es wurde kein Zielfeld für generierte Gazetteer-Daten ausgewählt.
-Wählen Sie ein Zielfeld in den Gazetteer-Einstellungen der Basiskonfiguration aus.","Gazetteer Plugin:
-
-No target field for generated Gazetteer data selected.
-Select a target field in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
-
-No target field for generated Gazetteer data selected.
-Select a target field in the Gazetteer settings in the base configuration.","Gazetteer Plugin:
-
-No target field for generated Gazetteer data selected.
-Select a target field in the Gazetteer settings in the base configuration."
-error.api.gazetteer_insert.object.duplicate,Gazetteer Plugin: Der Gazetteereintrag existiert bereits und kann nicht eingefügt werden.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.,Gazetteer Plugin: The Gazetteer entry already exists and can not be inserted.
-server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.checkbox,Enabled,Enabled,,
-server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.checkbox,Enabled,Enabled,,
-server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.label,Alternative Namen anzeigen,Show alternative names,,
-server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.label,Breitengrad und Längengrad anzeigen,Show latitude and longitude,,
-custom.data.type.gazetteer.types.latitude_longitude.text,Lat: %(lat)s - Lng: %(lng)s,Lat: %(lat)s - Lng: %(lng)s,,
-custom.data.type.gazetteer.types.card.show-less-button,Weniger anzeigen,Show less,,
-custom.data.type.gazetteer.types.card.show-more-button,Mehr anzeigen,Show more,,
+More information: https://github.com/programmfabrik/easydb-custom-data-type-gazetteer",FALSE
+server.config.name.system.update_interval_gazetteer,Automatische Aktualisierung für das Gazetteer Custom Data Type Plugin,FALSE,Automatic updates for the Gazetteer Custom Data Type Plugin,FALSE,Automatic updates for the Gazetteer Custom Data Type Plugin,FALSE,Paikkatietojen automaattinen päivitys,FALSE,Automatisk uppdatering för Gazetteer Custom Data Type Plugin,FALSE,Mises à jour automatiques pour le plug-in de type de données personnalisé Gazetteer,FALSE,Automatic updates for the Gazetteer Custom Data Type Plugin,FALSE,Automatic updates for the Gazetteer Custom Data Type Plugin,FALSE
+server.config.name.system.update_interval_gazetteer,Gazetteer Update Einstellungen,FALSE,Gazetteer Update settings,FALSE,Gazetteer Update settings,FALSE,Paikkatietojen päivitysasetukset,FALSE,Gazetteer uppdateringsinställningar,FALSE,Paramètres de mise à jour du répertoire géographique (Gazetteer),FALSE,Gazetteer Update settings,FALSE,Gazetteer Update settings,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.enabled.checkbox,Aktiviert,FALSE,Enabled,FALSE,Enabled,FALSE,Käytössä,FALSE,Aktiverad,FALSE,Activé,FALSE,Enabled,FALSE,Enabled,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.enabled.label,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.on_update.checkbox,Gazetteereinträge auch beim Ändern von Objekten aktualisieren,FALSE,Update Gazetteer info also when editing records,FALSE,Update Gazetteer info also when editing records,FALSE,Päivitä paikkatietomerkinnät myös objekteja vaihdettaessa,FALSE,Uppdatera Gazetteer-poster även när du byter objekt,FALSE,Mettre également à jour les informations du répertoire géographique lors de la modification des enregistrements,FALSE,Update Gazetteer info also when editing records,FALSE,Update Gazetteer info also when editing records,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.on_update.label,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE,-,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.on_update.label|hint,"Gazetteereinträge in Objekten werden standardmäßig nur beim Anlegen eines Objekts aktualisiert. Aktivieren Sie diese Option, damit die Einträge bei jeder Änderung des Objekts aktualisiert werden.",FALSE,"By default, Gazetteer entries in records are only updated when a record is created. Activate this option so that the entries are updated each time the record is edited.",FALSE,"By default, Gazetteer entries in records are only updated when a record is created. Activate this option so that the entries are updated each time the record is edited.",FALSE,"Oletuksena paikkatietomerkinnät objekteissa päivitetään vain, kun objekti luodaan. Ota tämä asetus käyttöön, jotta merkinnät päivitetään aina, kun objektia muutetaan.",FALSE,Som standard uppdateras Gazetteer-poster i objekt endast när ett objekt skapas. Aktivera detta alternativ så att posterna uppdateras varje gång objektet ändras.,FALSE,"Par défaut, les entrées du répertoire géographique dans les enregistrements ne sont mises à jour que lorsqu'un enregistrement est créé. Activez cette option pour que les entrées soient mises à jour à chaque modification de l'enregistrement.",FALSE,"By default, Gazetteer entries in records are only updated when a record is created. Activate this option so that the entries are updated each time the record is edited.",FALSE,"By default, Gazetteer entries in records are only updated when a record is created. Activate this option so that the entries are updated each time the record is edited.",FALSE
+server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.checkbox,Enabled,FALSE,Enabled,FALSE,Enabled,FALSE,Käytössä,FALSE,Aktiverad,FALSE,Activé,FALSE,,FALSE,,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.show_alternative_names.label,Alternative Namen anzeigen,FALSE,Show alternative names,FALSE,Show alternative names,FALSE,Näytä vaihtoehtoiset nimet,FALSE,Visa alternativa namn,FALSE,Afficher des noms alternatifs,FALSE,,FALSE,,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.checkbox,Enabled,FALSE,Enabled,FALSE,Enabled,FALSE,Käytössä,FALSE,Aktiverad,FALSE,Activé,FALSE,,FALSE,,FALSE
+server.config.parameter.system.gazetteer_plugin_settings.show_lat_lng.label,Breitengrad und Längengrad anzeigen,FALSE,Show latitude and longitude,FALSE,Show latitude and longitude,FALSE,Näytä leveys- ja pituusaste,FALSE,Visa latitud och longitud,FALSE,Afficher la latitude et la longitude,FALSE,,FALSE,,FALSE
+server.config.parameter.system.update_interval_gazetteer.days.label,Update alle x Tage durchführen,FALSE,Update every x days,FALSE,Update every x days,FALSE,Päivitysten tiheys päivinä,FALSE,Utför uppdatering var x dag,FALSE,Mettre à jour tous les x jours,FALSE,Update every x days,FALSE,Update every x days,FALSE
+server.config.parameter.system.update_interval_gazetteer.days.label,Tage zwischen Updates,FALSE,Days between updates,FALSE,Days between updates,FALSE,Päivitysten tiheys päivinä,FALSE,Dagar mellan uppdateringar,FALSE,Jours entre les mises à jour,FALSE,Days between updates,FALSE,Days between updates,FALSE
