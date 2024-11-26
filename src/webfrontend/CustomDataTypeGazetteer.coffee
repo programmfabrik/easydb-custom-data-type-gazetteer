@@ -78,12 +78,17 @@ class CustomDataTypeGazetteer extends CustomDataType
 		waitBlock.show()
 		@__fillMissingData(initData).done(setContent)
 
-		CUI.Events.listen
-			type: "map-detail-click-location"
-			node: content
-			call: (_, info) =>
-				if info.data?.position == initData.position
-					CUI.dom.scrollIntoView(content)
+		plugins = opts.detail?.getPlugins()
+		for plugin in plugins
+			if typeof MapDetailPlugin != 'undefined' and plugin instanceof MapDetailPlugin
+				CUI.Events.listen
+					type: "map-detail-click-location"
+					node: content
+					call: (_, info) =>
+						if info.data?.position == initData.position
+							CUI.dom.scrollIntoView(content)
+				break
+
 
 		return content
 
